@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <script defer src="renderer.js"></script>
+  <link href="./output.css" rel="stylesheet">
+</head>
+<body class="bg-secondary flex flex-col justify-center items-center h-svh">
+    <div class="border-2 border-primary p-8 flex flex-col gap-4">
+        <h2 class="text-3xl font-outfit font-semibold text-primary">Login</h2>
+        <form class="flex flex-col gap-2">
+            <input class="border-2 border-primary bg-secondary p-1 font-outfit" type="email" id="email" placeholder="Enter email" required>
+            <input class="border-2 border-primary bg-secondary p-1 font-outfit" type="password" id="password" placeholder="Enter password" required>
+            <button class="border-2 text-primary border-primary font-outfit font-semibold p-2" id="loginBtn">Login</button>
+            <button class="border-2 text-primary border-primary font-outfit font-semibold p-2" id="signupBtn">Sign Up</button>
+        </form>
+    </div>
+
+
+    <p id="message"></p>
+</body>
+</html>

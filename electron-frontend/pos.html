@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Point of Sale</title>
+    <script defer src="renderer.js"></script>
+  <link href="./output.css" rel="stylesheet">
+</head>
+<body class="flex flex-col gap-4 bg-secondary text-primary font-outfit">
+
+    <nav class="flex border-b-2 border-primary p-2 items-center justify-between">
+        <p class="font-monstserrat font-semibold ">Nikolyn's Laundry Shop</p>
+        <div class="">
+            <button class="border-2 border-primary px-2  hover:bg-primary hover:text-secondary transition-colors" type="button">Point of Sale</button>
+            <button class="border-2 border-primary px-2  hover:bg-primary hover:text-secondary transition-colors" type="button">Inventory</button>
+            <button class="border-2 border-primary px-2  hover:bg-primary hover:text-secondary transition-colors" type="button">Clock out</button>
+        </div>
+    </nav>
+    <p class="font-michroma font-black  text-3xl">POINT OF SALES</p>
+    <!-- Main body -->
+    <main class="flex gap-1">
+    <!-- pos -->
+        <div class="flex-1 flex flex-col gap-1 text-secondary bg-primary">
+            <div class="border-2 border-primary">
+                <p class="text-4xl font-bold text-accent">Laundry Weight</p>
+                <div class="flex gap-4">
+                    <div>
+                        <p>Regular Clothes</p>
+                        <div class="flex gap-2 items-center">
+                            <input class="p-2 text-primary font-bold bg-secondary" type="text" name="" id="">
+                            <p>kg</p>
+                        </div>
+                        <p>₱ 55 per 7kg</p>
+                    </div>
+                    <div>
+                        <p>Towels, Blankets, Beddings</p>
+                        <div class="flex gap-2 items-center">
+                            <input class="p-2 text-primary font-bold bg-secondary" type="text" name="" id="">
+                            <p>kg</p>
+                        </div>
+                        <p>₱ 55 per 4kg</p>
+                    </div>
+                    <div>
+                        <p>Comforter Queensize, Heavy Blankets</p>
+                        <div class="flex gap-2 items-center">
+                            <input class="p-2 text-primary font-bold bg-secondary" type="text" name="" id="">
+                            <p>pc</p>
+                        </div>
+                        <p>₱55 per 1pc</p>
+                    </div>
+                </div>
+                <p class="text-4xl font-bold text-accent">Services</p>
+                <div class="flex">
+                    <form class="flex gap-4 ">
+                        <div class="px-2 flex border-2 border-secondary text-secondary p-1 gap-2">
+                            <input class="scale-150" type="checkbox" name="" id="">
+                            <p class="text-2xl">Wash</p>
+                        </div>
+                        <div class="px-2 flex border-2 border-secondary text-secondary p-1 gap-2">
+                            <input class="scale-150" type="checkbox" name="" id="">
+                            <p class="text-2xl">Dry</p>
+                        </div>
+                        <div class="px-2 flex border-2 border-secondary text-secondary p-1 gap-2">
+                            <input class="scale-150" type="checkbox" name="" id="">
+                            <p class="text-2xl">Fold</p>
+                        </div>
+                        <div class="px-2 flex border-2 border-secondary text-secondary p-1 gap-2">
+                            <input class="scale-150" type="checkbox" name="" id="">
+                            <p class="text-2xl">Full Service</p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="border-2 border-primary">
+                <p class="text-4xl font-bold text-accent">Products</p>
+                <div class="flex">
+                    <input class="flex-1 mr-4 p-1 text-primary" type="text" name="" id="" placeholder="Search Product...">
+                    <p>Filter</p>
+                </div>
+                <div>
+                    <p>Name</p>
+                    <p>Price</p>
+                    <p>Qty.</p>
+                </div>
+            </div>
+        </div>
+    <!-- order summary -->
+        <div class="border-2 border-primary px-2">
+            <p class="font-bold text-3xl">Order Summary</p>
+        </div>
+    </main>
+</body>
+</html>
