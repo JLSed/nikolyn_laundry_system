@@ -51,4 +51,22 @@ async function createNewWorkerEntry(user_id, first_name, middle_name, last_name)
   if (error) return { error };
   return { success: true, data };
 }
-module.exports = { login, signUp, signOut };
+
+async function getCurrentWorker() {
+  const session = await supabase.auth.getSession();
+  const userId = session.data?.session?.user?.id;
+  if (!userId) return { success: false };
+
+  const { data, error } = await supabase
+    .from("TBL_WORKER")
+    .select("first_name, middle_name, last_name")
+    .eq("user_id", userId)
+    .single();
+
+  if (error || !data) return { success: false };
+
+  return { success: true, worker: data };
+}
+
+
+module.exports = { login, signUp, signOut, getCurrentWorker };
