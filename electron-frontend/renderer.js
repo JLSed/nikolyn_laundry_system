@@ -5,7 +5,10 @@ if (loginBtn) {
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
     const response = await window.electron.login(email, password);
-    if (!response.success) {
+    // switch html to pos when login is success
+    if (response.success) {
+        window.location.href = "./pos.html";
+    } else {
         document.getElementById("message").innerText = "Login failed: " + response.message;
     }
 });
@@ -27,3 +30,29 @@ if (signupBtn) {
     }
 })
 }
+
+  const clockOutBtn = document.getElementById("clockOutBtn");
+  const modal = document.getElementById("clockOutModal");
+  const cancelBtn = document.getElementById("cancelClockOut");
+  const confirmBtn = document.getElementById("confirmClockOut");
+
+  if (clockOutBtn) {
+    clockOutBtn.addEventListener("click", () => {
+      modal.classList.remove("hidden");
+    });
+  }
+
+  cancelBtn.addEventListener("click", () => {
+    modal.classList.add("hidden");
+  });
+
+  confirmBtn.addEventListener("click", async () => {
+    modal.classList.add("hidden");
+
+    const response = await window.electron.signOut();
+    if (response.success) {
+      window.location.href = "login.html";
+    } else {
+      alert("Error logging out: " + response.message);
+    }
+  });

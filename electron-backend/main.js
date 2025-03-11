@@ -1,5 +1,5 @@
 const { app, BrowserWindow, ipcMain } = require('electron')
-const { signUp, login} = require('./supabase.js')
+const { signUp, signOut , login} = require('./supabase.js')
 const path = require('path');
 
 
@@ -19,18 +19,16 @@ function createMainWindow() {
 
 // listens to login button in login.html
 ipcMain.handle("auth:login", async (_, email, password) => {
-    const response = await login(email, password);
-    // switch html to pos when login is success
-    if (response.success) {
-        mainWindow.loadFile(path.join(__dirname, '../electron-frontend/pos.html'));
-    }
-    return response;
+    return response = await login(email, password);
 });
 
 // listens to signup button in signup.html
 ipcMain.handle("auth:signup", async (_, email, password, first_name, middle_name, last_name) => {
-    const result = await signUp(email, password, first_name, middle_name, last_name);
-    return result;
+    return result = await signUp(email, password, first_name, middle_name, last_name);
+});
+
+ipcMain.handle("auth:signout", async () => {
+    return result = await signOut();
 });
 
 app.whenReady().then(() => {

@@ -26,6 +26,18 @@ async function signUp(email, password, first_name, middle_name, last_name) {
     return { success: true, user: data.user };
 }
 
+async function signOut() {
+  try {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      return { success: false, message: error.message };
+    }
+    return { success: true };
+  } catch (err) {
+    return { success: false, message: err.message };
+  }
+}
+
 async function createNewWorkerEntry(user_id, first_name, middle_name, last_name) {
   const { data, error } = await supabase.from('TBL_WORKER').insert([
     {
@@ -39,4 +51,4 @@ async function createNewWorkerEntry(user_id, first_name, middle_name, last_name)
   if (error) return { error };
   return { success: true, data };
 }
-module.exports = { login, signUp };
+module.exports = { login, signUp, signOut };
