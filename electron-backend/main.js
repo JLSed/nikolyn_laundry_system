@@ -17,7 +17,6 @@ function createMainWindow() {
     mainWindow.loadFile(path.join(__dirname, '../electron-frontend/login.html'))
 }
 
-// qwerty1234567890
 // listens to login button in login.html
 ipcMain.handle("auth:login", async (_, email, password) => {
     const response = await login(email, password);
@@ -28,9 +27,10 @@ ipcMain.handle("auth:login", async (_, email, password) => {
     return response;
 });
 
-// listens to signup button in login.html
-ipcMain.handle("auth:signup", async (_, email, password) => {
-    return await signUp(email, password);
+// listens to signup button in signup.html
+ipcMain.handle("auth:signup", async (_, email, password, first_name, middle_name, last_name) => {
+    const result = await signUp(email, password, first_name, middle_name, last_name);
+    return result;
 });
 
 app.whenReady().then(() => {

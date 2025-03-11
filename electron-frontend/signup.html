@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up Account</title>
+    <script defer src="renderer.js"></script>
+  <link href="./output.css" rel="stylesheet">
+</head>
+<body class="bg-secondary">
+    <div class="border-2 border-primary p-8 flex flex-col gap-4">
+        <div class="flex justify-between">
+            <h2 class="text-3xl font-outfit font-semibold text-primary">Sign Up</h2>
+            <a class="text-3xl font-outfit font-semibold text-primary" href="./login.html">Go Back</a>
+        </div>
+
+        <form class="flex flex-col gap-2">
+            <input class="border-2 border-primary bg-secondary p-1 font-outfit" type="text" id="first_name" placeholder="First Name" required>
+            <input class="border-2 border-primary bg-secondary p-1 font-outfit" type="text" id="middle_name" placeholder="Middle Name" required>
+            <input class="border-2 border-primary bg-secondary p-1 font-outfit" type="text" id="last_name" placeholder="Last Name" required>
+            <input class="border-2 border-primary bg-secondary p-1 font-outfit" type="email" id="email" placeholder="Email" required>
+            <input class="border-2 border-primary bg-secondary p-1 font-outfit" type="password" id="password" placeholder="Password" required>
+            <button class="border-2 text-primary border-primary font-outfit font-semibold p-2" id="signup">Sign Up</button>
+        </form>
+    </div>
+
+    </div>
+    <p id="message"></p>
+</body>
+</html>
