@@ -1,117 +1,147 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const inputs = document.querySelectorAll(".category-input");
-  const checkboxes = document.querySelectorAll(".service-checkbox");
-  const orderSummary = document.getElementById("orderSummary");
+const serviceInputs = document.querySelectorAll(".category-input");
+const serviceCheckboxes = document.querySelectorAll(".service-checkbox");
+const orderSummarySection = document.getElementById("orderSummary");
+const orderSummaryTotal = document.getElementById("orderTotal");
 
-  // Global toggle function to show/hide sections
-  window.toggleSection = function(id) {
-    const el = document.getElementById(id);
-    if (el) {
-      el.classList.toggle("hidden");
-      const icon = document.getElementById("icon-" + id);
-      if (icon) {
-        icon.innerText = el.classList.contains("hidden") ? "[+]" : "[-]";
-      }
+function updateServicePrice(totalPrice, id) {
+    const orderServicePrice = document.getElementById(id);
+    if (orderServicePrice) {
+        orderServicePrice.innerHTML = totalPrice
     }
-  };
+}
+function updateSummary() {
 
-  function updateSummary() {
-    // Gather selected services from checkboxes.
-    const selectedServices = Array.from(checkboxes)
-      .filter(cb => cb.checked)
-      .map(cb => cb.value);
-
-    // Gather input data from each input field.
-    const inputData = Array.from(inputs)
-      .map(input => {
-        const value = parseFloat(input.value);
-        // Only consider valid positive numbers.
+    const serviceData = Array.from(serviceInputs).map(data => {
+        const value = parseFloat(data.value);
         if (!value || value <= 0) return null;
         return {
-          category: input.dataset.category, // e.g., "Regular Clothes"
-          price: input.dataset.price,       // e.g., "55"
-          unit: input.dataset.unit,         // e.g., "kg" or "pc"
-          amount: value,                    // the numeric value entered
-          limit: input.dataset.limit        // dynamic weight limit per line (e.g., "7" or "4")
+            value: value,
+            category: data.dataset.category,
+            price: data.dataset.price,
+            unit: data.dataset.unit,
+            limit: data.dataset.limit,
         };
-      })
-      .filter(Boolean);
+    }).filter(Boolean); // filter to only get non-null
 
-    // Begin building the summary HTML.
-    let summaryHTML = `<p class="font-bold text-3xl">Order Summary</p>`;
+    const selectedServices = Array.from(serviceCheckboxes)
+    .filter(cb => cb.checked)
+    .map(cb => cb.value)
 
-    // For each selected service (e.g., "Wash", "Dry", etc.)
-    selectedServices.forEach(service => {
-      // Create a safe ID string by replacing spaces with dashes.
-      const serviceId = `service-${service.replace(/\s/g, '-')}`;
-      summaryHTML += `
-        <div class="ml-2 font-semibold service-section">
-          <div class="service-header cursor-pointer" onclick="toggleSection('${serviceId}')">
-            - ${service} <span id="icon-${serviceId}">[+]</span>
-          </div>
-          <div id="${serviceId}" class="service-content hidden">
-      `;
-
-      // Group input data by category.
-      const grouped = {};
-      inputData.forEach(item => {
-        if (!grouped[item.category]) grouped[item.category] = [];
-        grouped[item.category].push(item);
-      });
-
-      // For each category, add an expandable section.
-      for (const category in grouped) {
-        // Create a unique ID for the category section.
-        const categoryId = `cat-${service.replace(/\s/g, '-')}-${category.replace(/\s/g, '-')}`;
-        summaryHTML += `
-          <div class="ml-4 category-section">
-            <div class="category-header cursor-pointer" onclick="toggleSection('${categoryId}')">
-              -- ${category} <span id="icon-${categoryId}">[+]</span>
-            </div>
-            <div id="${categoryId}" class="category-content hidden">
-        `;
-
-        // For each entry in this category.
-        grouped[category].forEach(entry => {
-          if (entry.unit === "kg") {
-            // Use the limit from the data attribute; default to 7 if not provided.
-            const limit = entry.limit ? parseFloat(entry.limit) : 7;
-            const fullLines = Math.floor(entry.amount / limit);
-            const remainder = entry.amount % limit;
-
-            // Add one line per full limit.
-            for (let i = 0; i < fullLines; i++) {
-              summaryHTML += `<div class="ml-6">--- (₱ ${entry.price}) ${limit}${entry.unit}</div>`;
+    let orderSummaryHTML = `<p class="font-bold text-3xl">Order Summary</p>`;
+    const serviceTotalPrices = {};
+    window.toggleSection = function(id) {
+        const orderContent = document.getElementById(id);
+        if (orderContent) {
+            orderContent.classList.toggle("hidden");
+            const icon = document.getElementById("icon-" + id);
+            if (icon) {
+                icon.innerHTML = orderContent.classList.contains("hidden") ? 
+                `<i class="fa-solid fa-chevron-down"></i>` : 
+                `<i class="fa-solid fa-chevron-up"></i>`;
             }
-            // Add a line for the remaining weight if any.
-            if (remainder > 0) {
-              const remRounded = Math.round(remainder * 10) / 10;
-              summaryHTML += `<div class="ml-6">--- (₱ ${entry.price}) ${remRounded}${entry.unit}</div>`;
-            }
-          } else {
-            // For units other than kg (like pieces), simply display the value.
-            summaryHTML += `<div class="ml-6">--- (₱ ${entry.price}) ${entry.amount}${entry.unit}</div>`;
+        }
+    };
+
+    selectedServices.forEach(serviceName => {
+        const serviceId = `service-${serviceName.replace(/\s/g, '-')}`;
+        orderSummaryHTML += `<div class="order-section ml-2 text-lg"> `
+        // order-header starting tag
+        orderSummaryHTML += `
+                <div class="order-header cursor-pointer select-none font-bold text-xl" onClick="toggleSection('${serviceId}')">
+                                    <span id="totalprice-${serviceId}" class="rounded bg-gray-300 px-2">0</span>
+                                    • ${serviceName} 
+                                    <span id="icon-${serviceId}">
+                                        <i class="fa-solid fa-chevron-down"></i>
+                                    </span>
+                                </div>`// order-header closing tag
+        // total price for each service
+        let totalPrice = 0;
+        if (serviceName === "Full Service") {
+            orderSummaryHTML += `<div id="${serviceId}" class="order-content hidden select-none">
+
+                                    <div class="ml-4 font-normal"><span class="rounded bg-gray-300 px-2">100</span> Fixed Price</div>
+                                </div>`
+            totalPrice = 100;
+        } else {
+            orderSummaryHTML += `<div id="${serviceId}" class="order-content select-none">`
+            const orderContents = {};
+            serviceData.forEach(data => {
+                //check muna kung existing ba yung category array sa orderContents; pag hindi, create new category array
+                if (!orderContents[data.category]) orderContents[data.category] = [];
+                // push data sa created category array
+                orderContents[data.category].push(data);
+            });
+
+            for (const category in orderContents) {
+                let total = 0;
+                const categoryId = `cat-${serviceName.replace(/\s/g, '-')}-${category.replace(/\s/g, '-')}`;
+                orderContents[category].forEach(entry => {
+                    //kunin kung times na nareach yung max load, kaya ceil para kahit na less than sa max load counted as one
+                    const maxLoad = Math.ceil(entry.value / entry.limit)
+                    const remainder = entry.value % entry.limit;
+                    if (remainder > 0) {
+                      maxLoad - 1;
+                    }
+                    total += parseFloat(entry.price) * maxLoad;
+                    orderSummaryHTML += `<div class="order-category-section ml-4 font-normal">`
+                    // order-category-header starting tag
+                    orderSummaryHTML += `
+                                        <div class="order-category-header cursor-pointer select-none" onClick="toggleSection('${categoryId}')">
+                                            <span class="rounded bg-gray-300 px-2">${total}</span> - ${entry.category}
+                                            <span id="icon-${categoryId}">
+                                                <i class="fa-solid fa-chevron-down"></i>
+                                            </span>
+                                        </div>`
+                    // order-category-content starting tag
+                    orderSummaryHTML += `<div id="${categoryId}" class="order-category-content ml-8 hidden">`
+                    for (let index = 0; index < maxLoad; index++) {
+                        orderSummaryHTML += `<div>
+                                                <span class="rounded bg-gray-300 px-2">${entry.price}</span> - ${entry.limit} ${entry.unit}
+                                            </div>`
+                    }
+                    if (remainder > 0) {
+                        const remRounded = Math.round(remainder * 10) / 10;
+                        orderSummaryHTML += `<div>
+                                                <span class="rounded bg-gray-300 px-2">${entry.price}</span> - ${remRounded} ${entry.unit}
+                                            </div>`
+                    }
+    
+                    orderSummaryHTML += `</div>`
+                    orderSummaryHTML += `</div>` // order-category-section closing tag
+                });
+
+                totalPrice += total;
           }
-        });
-
-        summaryHTML += `</div></div>`; // Close category-content and category-section.
-      }
-
-      summaryHTML += `</div></div>`; // Close service-content and service-section.
+        }
+        serviceTotalPrices[`totalprice-${serviceId}`] = totalPrice;
+        
+        orderSummaryHTML += `</div> `; // order-content closing tag
+        orderSummaryHTML += `</div> `; // order-section closing tag
     });
 
-    // Update the Order Summary container with the new HTML.
-    orderSummary.innerHTML = summaryHTML;
-  }
-  // Watch for any change in inputs or checkboxes
-  inputs.forEach(input => input.addEventListener("input", updateSummary));
-  checkboxes.forEach(cb => cb.addEventListener("change", updateSummary));
+    orderSummarySection.innerHTML = orderSummaryHTML;
+    // update full price per service
+    let overallPrice = 0;
+    for (const id in serviceTotalPrices) {
+        updateServicePrice(serviceTotalPrices[id], id);
+        overallPrice += serviceTotalPrices[id];
+    }
+    orderSummaryTotal.innerHTML = `Total: ${overallPrice}`
+}
 
-  const workerNameDisplay = document.getElementById("workerNameDisplay");
-  if (workerNameDisplay) {
-    displayWorkerName();
-  }
+serviceInputs.forEach(input => input.addEventListener("input", updateSummary));
+serviceCheckboxes.forEach(checkbox => checkbox.addEventListener("change", updateSummary));
+
+const workerNameDisplay = document.getElementById("workerNameDisplay");
+if (workerNameDisplay) {
+  displayWorkerName();
+}
+
+
 });
+
+
 
 
 
