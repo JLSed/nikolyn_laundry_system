@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+
 const serviceInputs = document.querySelectorAll(".category-input");
 const serviceCheckboxes = document.querySelectorAll(".service-checkbox");
 const orderSummarySection = document.getElementById("orderSummary");
@@ -133,99 +134,4 @@ function updateSummary() {
 serviceInputs.forEach(input => input.addEventListener("input", updateSummary));
 serviceCheckboxes.forEach(checkbox => checkbox.addEventListener("change", updateSummary));
 
-const workerNameDisplay = document.getElementById("workerNameDisplay");
-if (workerNameDisplay) {
-  displayWorkerName();
-}
-
-
 });
-
-
-
-
-
-
-
-const loginBtn = document.getElementById("loginBtn");
-if (loginBtn) {
-    loginBtn.addEventListener("click", async () => {
-    event.preventDefault();
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-    const response = await window.electron.login(email, password);
-    // switch html to pos when login is success
-    if (response.success) {
-        window.location.href = "./pos.html";
-    } else {
-        document.getElementById("message").innerText = "Login failed: " + response.message;
-    }
-});
-}
-const signupBtn = document.getElementById("signup");
-if (signupBtn) {
-    signupBtn.addEventListener("click", async () => {
-    event.preventDefault();
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-    const first_name = document.getElementById("first_name").value;
-    const middle_name = document.getElementById("middle_name").value;
-    const last_name = document.getElementById("last_name").value;
-    const response = await window.electron.signUp(email, password, first_name, middle_name, last_name);
-    if (response.success) {
-        document.getElementById("message").innerText = "Signup successful! Please check your email: " + response.user.email;
-    } else {
-        document.getElementById("message").innerText = "Signup failed: " + response.message;
-    }
-})
-}
-
-const clockOutBtn = document.getElementById("clockOutBtn");
-const modal = document.getElementById("clockOutModal");
-const cancelBtn = document.getElementById("cancelClockOut");
-const confirmBtn = document.getElementById("confirmClockOut");
-
-if (clockOutBtn) {
-  clockOutBtn.addEventListener("click", () => {
-    modal.classList.remove("hidden");
-  });
-}
-
-cancelBtn.addEventListener("click", () => {
-  modal.classList.add("hidden");
-});
-
-confirmBtn.addEventListener("click", async () => {
-  modal.classList.add("hidden");
-
-  const response = await window.electron.signOut();
-  if (response.success) {
-    // remove the current worker name to the local storage then redirect to login page
-    localStorage.removeItem("worker_shorten_name")
-    window.location.href = "./login.html";
-  } else {
-    alert("Error logging out: " + response.message);
-  }
-});
-
-async function displayWorkerName() {
-  // check first if the name is cached in the local storage so it does not fetch data from the database every refresh
-  const cached_name = localStorage.getItem("worker_shorten_name");
-  if(cached_name) {
-    workerNameDisplay.innerText = JSON.parse(cached_name)
-  } else {
-    const response = await window.electron.getCurrentWorker();
-    if (response && response.success) {
-      const worker = response.worker;
-
-      const firstInitial = worker.first_name?.charAt(0).toUpperCase() || '';
-      const middleInitial = worker.middle_name?.charAt(0).toUpperCase() || '';
-      const lastName = worker.last_name || '';
-      const shortenName = `${firstInitial}. ${middleInitial}. ${lastName}`;
-      localStorage.setItem("worker_shorten_name", JSON.stringify(shortenName))
-      workerNameDisplay.innerText = shortenName
-    } else {
-      workerNameDisplay.innerText = "Unknown Worker";
-    }
-  }
-}

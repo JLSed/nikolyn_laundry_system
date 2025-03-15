@@ -774,12 +774,12 @@ video {
   padding-bottom: 0.5rem;
 }
 
-.pr-4{
-  padding-right: 1rem;
-}
-
 .pr-2{
   padding-right: 0.5rem;
+}
+
+.pr-4{
+  padding-right: 1rem;
 }
 
 .text-center{
