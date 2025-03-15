@@ -78,12 +78,12 @@ function updateSummary() {
                 const categoryId = `cat-${serviceName.replace(/\s/g, '-')}-${category.replace(/\s/g, '-')}`;
                 orderContents[category].forEach(entry => {
                     //kunin kung times na nareach yung max load, kaya ceil para kahit na less than sa max load counted as one
-                    const maxLoad = Math.ceil(entry.value / entry.limit)
+                    let maxLoad = Math.ceil(entry.value / entry.limit)
                     const remainder = entry.value % entry.limit;
-                    if (remainder > 0) {
-                      maxLoad - 1;
-                    }
                     total += parseFloat(entry.price) * maxLoad;
+                    if (remainder > 0) {
+                      maxLoad -= 1;
+                    }
                     orderSummaryHTML += `<div class="order-category-section ml-4 font-normal">`
                     // order-category-header starting tag
                     orderSummaryHTML += `

@@ -14,7 +14,7 @@ function createMainWindow() {
         },
     });
 
-    mainWindow.loadFile(path.join(__dirname, '../electron-frontend/html/login.html'))
+    mainWindow.loadFile(path.join(__dirname, '../electron-frontend/html/pos.html'))
 }
 
 // listens to login button in login.html
