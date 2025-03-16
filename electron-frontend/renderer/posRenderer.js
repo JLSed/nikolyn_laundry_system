@@ -1,9 +1,34 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+
+
+
+serviceInputs.forEach(input => input.addEventListener("input", updateSummary));
+serviceCheckboxes.forEach(checkbox => checkbox.addEventListener("change", updateSummary));
+displayProductList()
+});
+
+
+
 const serviceInputs = document.querySelectorAll(".category-input");
 const serviceCheckboxes = document.querySelectorAll(".service-checkbox");
 const orderSummarySection = document.getElementById("orderSummary");
 const orderSummaryTotal = document.getElementById("orderTotal");
+const productListBody = document.getElementById("productBody");
+
+async function displayProductList() {
+    const products = await window.electron.getAllProducts();
+    products.forEach(item => {
+        const itemName = item.TBL_PRODUCT_ITEM?.item_name || "N/A";
+        const price = item.TBL_PRODUCT_ITEM?.price || "N/A";
+        const row = document.createElement("tr");
+        row.innerHTML = `
+        <td class="p-2">${itemName}</td>
+        <td class="p-2">₱ ${price}</td>`;
+        productListBody.appendChild(row);
+    });
+
+}
 
 function updateServicePrice(totalPrice, id) {
     const orderServicePrice = document.getElementById(id);
@@ -11,8 +36,8 @@ function updateServicePrice(totalPrice, id) {
         orderServicePrice.innerHTML = totalPrice
     }
 }
-function updateSummary() {
 
+function updateSummary() {
     const serviceData = Array.from(serviceInputs).map(data => {
         const value = parseFloat(data.value);
         if (!value || value <= 0) return null;
@@ -107,7 +132,6 @@ function updateSummary() {
                                                 <span class="rounded bg-gray-300 px-2">${entry.price}</span> - ${remRounded} ${entry.unit}
                                             </div>`
                     }
-    
                     orderSummaryHTML += `</div>`
                     orderSummaryHTML += `</div>` // order-category-section closing tag
                 });
@@ -130,8 +154,3 @@ function updateSummary() {
     }
     orderSummaryTotal.innerHTML = `Total: ${overallPrice}`
 }
-
-serviceInputs.forEach(input => input.addEventListener("input", updateSummary));
-serviceCheckboxes.forEach(checkbox => checkbox.addEventListener("change", updateSummary));
-
-});

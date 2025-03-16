@@ -16,19 +16,23 @@
         </div>
     </nav>
     <p class="font-michroma font-black  text-3xl">INVENTORY</p>
-    <div class="h-2 bg-primary"></div>
     <!-- Main body -->
-    <main>
-        <div class=" flex justify-between text-xl px-4">
-            <p>Product Name</p>
-            <p>Price</p>
-            <p>Purchased Date</p>
-            <p>Expiration Date</p>
-            <p>Added Date</p>
-            <p>Stock Status</p>
-        </div>
-    <div class="h-2 bg-primary"></div>
-        
+    <main class="">
+    <table class="w-full text-left border-collapse">
+        <thead class="bg-primary text-white">
+        <tr>
+            <th class="p-2">Product Name</th>
+            <th class="p-2">Price</th>
+            <th class="p-2">Purchased Date</th>
+            <th class="p-2">Expiration Date</th>
+            <th class="p-2">Category</th>
+            <th class="p-2">Stock Status</th>
+        </tr>
+        </thead>
+        <tbody id="inventoryBody" class="bg-secondary text-primary">
+        <!-- products list -->
+        </tbody>
+    </table>
     </main>
         <!-- Clock Out Confirmation Modal -->
     <div id="clockOutModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
@@ -42,6 +46,7 @@
         </div>
     </div>
 
+    <script defer src="../renderer/inventoryRenderer.js"></script>
     <script defer src="../renderer/mainRenderer.js"></script>
 
 </body>

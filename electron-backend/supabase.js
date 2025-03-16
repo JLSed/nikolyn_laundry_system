@@ -68,5 +68,28 @@ async function getCurrentWorker() {
   return { success: true, worker: data };
 }
 
+async function getAllProducts() {
+ const { data, error } = await supabase
+    .from("TBL_PRODUCT")
+    .select(`
+      product_id,
+      added_at,
+      expiration_date,
+      purchased_date,
+      TBL_PRODUCT_ITEM (
+        item_name,
+        price,
+        category
+      )
+    `);
 
-module.exports = { login, signUp, signOut, getCurrentWorker };
+  if (error) {
+    console.error("Error fetching inventory:", error);
+    return [];
+  }
+  return data;
+}
+
+
+
+module.exports = { login, signUp, signOut, getCurrentWorker, getAllProducts };
