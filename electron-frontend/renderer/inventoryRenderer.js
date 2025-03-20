@@ -10,27 +10,71 @@ document.addEventListener("DOMContentLoaded", async () => {
     const expirationDate = product.expiration_date || "—";
     const addedAt = product.added_at || "—";
 
-    const row = `<tr class="selectable-row hover:bg-blue-100 cursor-pointer transition-colors">
-      <td class="p-2">${itemName}</td>
-      <td class="p-2">₱ ${price}</td>
-      <td class="p-2">${purchasedDate}</td>
-      <td class="p-2">${expirationDate}</td>
-      <td class="p-2">${category}</td>
-      <td class="p-2">${checkStockStatus(expirationDate)}</td>
-      </tr>
-    `;
+    const row = `<tr class="selectable-row hover:bg-gray-300 cursor-pointer transition-colors group" onClick="testtest()">
+                <td class="p-2 ">
+                    ${itemName}
+                </td>
+                <td class="p-2">₱ ${price}</td>
+                <td class="p-2">${purchasedDate}</td>
+                <td class="p-2">${expirationDate}</td>
+                <td class="p-2">${category}</td>
+                <td class="p-2 relative overflow-hidden">${checkStockStatus(expirationDate)}
+                    <div class="absolute right-0 top-0 bottom-0 flex items-center p-3 font-bold bg-primary text-secondary transform translate-x-full transition-transform duration-300 group-hover:translate-x-0">
+                    <span>&lt; Edit</span>
+                    </div>
+                </td>
+            </tr>
+            `;
 
     tableBody.innerHTML += row;
   });
+
+    window.testtest = function(id) {
+        console.log("test " + id);
+    }
+
+
+    const addNewProductModal = document.getElementById("addNewProductModal");
+    const addNewProductButton = document.getElementById("addNewProductButton");
+    const openAddNewProductModal = document.getElementById("openAddNewProductModal");
+    const cancelAddNewProductButton = document.getElementById("cancelAddNewProductButton");
+    const productCategories = document.getElementById("product_categories");
+    openAddNewProductModal.addEventListener("click", async () => {
+        addNewProductModal.classList.remove("hidden");
+        const categoryList = await window.electron.getProductCategories();
+        const categories = categoryList.map(item => item.category);
+        const uniqueCategories = [...new Set(categories)];
+        productCategories.innerHTML = "";
+        uniqueCategories.forEach(category => {
+            productCategories.innerHTML += `<option value="${category}"></option>`;
+        });
+
+    });
+    cancelAddNewProductButton.addEventListener("click", () => {
+        addNewProductModal.classList.add("hidden");
+
+    });
+    addNewProductButton.addEventListener("click", async () => {
+        event.preventDefault();
+        const productName = document.getElementById("product_name").value;
+        const productCategory = document.getElementById("product_category").value;
+        const productPrice = document.getElementById("product_price").value;
+        const result = await window.electron.addNewProduct(productName, productCategory, productPrice);
+    });
+    
 });
+
+
+
+
+
 // for timestampz na data type
 function formatDate(date) {
     const newDate = new Date(date);
     return newDate.toISOString().split("T")[0];
 }
 
-
-// Optional: Add a basic function to determine stock status
+// temp
 function checkStockStatus(expirationDate) {
   if (!expirationDate) return "Unknown";
 

@@ -1,5 +1,13 @@
 const { app, BrowserWindow, ipcMain } = require('electron')
-const { signUp, signOut , login, getCurrentWorker, getAllProducts} = require('./supabase.js')
+const { signUp,
+    signOut ,
+    login,
+    getCurrentWorker,
+    getAllProducts,
+    getProductCategories,
+    addNewProduct,
+    
+} = require('./supabase.js')
 const path = require('path');
 
 // listens to login button in login.html
@@ -27,6 +35,15 @@ ipcMain.handle("request:all_products", async () => {
     return await getAllProducts();
 });
 
+ipcMain.handle("add:product_item", async (_, name, category, price) => {
+    return await addNewProduct(name, category, price);
+});
+
+//listens to the add new product in inventory when clicked
+ipcMain.handle("request:product_categories", async () => {
+    return await getProductCategories();
+})
+
 let mainWindow;
 
 function createMainWindow() {
@@ -38,7 +55,7 @@ function createMainWindow() {
         },
     });
 
-    mainWindow.loadFile(path.join(__dirname, '../electron-frontend/html/pos.html'))
+    mainWindow.loadFile(path.join(__dirname, '../electron-frontend/html/inventory.html'))
 }
 
 
