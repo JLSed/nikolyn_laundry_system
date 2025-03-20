@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 <td class="p-2">${category}</td>
                 <td class="p-2 relative overflow-hidden">${checkStockStatus(expirationDate)}
                     <div class="absolute right-0 top-0 bottom-0 flex items-center p-3 font-bold bg-primary text-secondary transform translate-x-full transition-transform duration-300 group-hover:translate-x-0">
-                    <span>&lt; Edit</span>
+                        <span>&lt; Edit</span>
                     </div>
                 </td>
             </tr>
@@ -60,6 +60,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         const productCategory = document.getElementById("product_category").value;
         const productPrice = document.getElementById("product_price").value;
         const result = await window.electron.addNewProduct(productName, productCategory, productPrice);
+        if (result.success) {
+            document.getElementById("message").innerText = "Added successfully.";
+        } else {
+            document.getElementById("message").innerText = "Failed added: " + result.error.message;
+        }
     });
     
 });

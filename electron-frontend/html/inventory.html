@@ -41,6 +41,7 @@
         </tbody>
     </table>
     </main>
+         <!-- add new product Modal -->   
     <div id="addNewProductModal" class="fixed hidden inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div class="bg-white p-6 rounded-sm text-center">
             <p class="text-xl font-bold">New Product</p>
@@ -54,6 +55,24 @@
             </form>
         <button id="cancelAddNewProductButton" class="border-2 border-primary px-2 py-1">Cancel</button>
         <button id="addNewProductButton" class="border-2 border-primary px-2 py-1">Add</button>
+        <p id="message"></p>
+        </div>
+    </div>
+         <!-- add new product entry Modal -->   
+    <div id="addNewProductModal" class="fixed hidden inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white p-6 rounded-sm text-center">
+            <p class="text-xl font-bold">New Entry</p>
+            <form class="flex flex-col">
+                <input type="test" id="product_name" name="product_name" placeholder="Product Name">
+                <input type="test" id="product_category" list="product_categories" name="product_category" placeholder="Category">
+                <datalist id="product_categories">
+                        <!-- options -->
+                </datalist>
+                <input type="test" id="product_price" name="product_price" placeholder="Price" value="">
+            </form>
+        <button id="cancelAddNewProductButton" class="border-2 border-primary px-2 py-1">Cancel</button>
+        <button id="addNewProductButton" class="border-2 border-primary px-2 py-1">Add</button>
+        <p id="message"></p>
         </div>
     </div>
 

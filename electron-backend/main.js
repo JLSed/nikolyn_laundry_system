@@ -12,7 +12,7 @@ const path = require('path');
 
 // listens to login button in login.html
 ipcMain.handle("auth:login", async (_, email, password) => {
-    return response = await login(email, password);
+    return result = await login(email, password);
 });
 
 // listens to signup button in signup.html
@@ -41,7 +41,7 @@ ipcMain.handle("add:product_item", async (_, name, category, price) => {
 
 //listens to the add new product in inventory when clicked
 ipcMain.handle("request:product_categories", async () => {
-    return await getProductCategories();
+    return result = await getProductCategories();
 })
 
 let mainWindow;

@@ -110,11 +110,8 @@ async function addNewProduct(item_name, category, price) {
     }
   ]);
 
-    if (error) {
-        console.error("Error: " , error);
-        return [];
-    }
-  return true;
+  if (error) return { success: false, error: error };
+  return { success: true, data };
 }
 
 
