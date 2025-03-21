@@ -19,7 +19,7 @@
         <p class="font-michroma font-black text-3xl">INVENTORY</p>
         <div class="flex gap-2 pr-2">
             <button id="openAddNewProductModal" class="border-2 border-primary px-2 py-1">New Product</button>
-            <a href="" class="border-2 border-primary px-2 py-1">New Entry</a>
+            <button id="openAddNewEntryModal" class="border-2 border-primary px-2 py-1">New Entry</button>
             <a href="" class="border-2 border-primary px-2 py-1">Remove Product</a>
         </div>
     </div>
@@ -46,8 +46,8 @@
         <div class="bg-white p-6 rounded-sm text-center">
             <p class="text-xl font-bold">New Product</p>
             <form class="flex flex-col">
-                <input type="test" id="product_name" name="product_name" placeholder="Product Name">
-                <input type="test" id="product_category" list="product_categories" name="product_category" placeholder="Category">
+                <input type="text" id="product_name" name="product_name" placeholder="Product Name">
+                <input type="text" id="product_category" list="product_categories" name="product_category" placeholder="Category">
                 <datalist id="product_categories">
                         <!-- options -->
                 </datalist>
@@ -58,20 +58,21 @@
         <p id="message"></p>
         </div>
     </div>
-         <!-- add new product entry Modal -->   
-    <div id="addNewProductModal" class="fixed hidden inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+         <!-- add new entry entry Modal -->   
+    <div id="addNewEntryModal" class="fixed hidden inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div class="bg-white p-6 rounded-sm text-center">
             <p class="text-xl font-bold">New Entry</p>
             <form class="flex flex-col">
-                <input type="test" id="product_name" name="product_name" placeholder="Product Name">
-                <input type="test" id="product_category" list="product_categories" name="product_category" placeholder="Category">
-                <datalist id="product_categories">
-                        <!-- options -->
-                </datalist>
-                <input type="test" id="product_price" name="product_price" placeholder="Price" value="">
+                <select id="product_items_list">
+                </select>
+                <label for="expiration_date">Expiration Date</label>
+                <input type="date" id="expiration_date" name="expiration_date" placeholder="Expiration Date">
+                <label for="purchased_date">Purchased Date</label>
+                <input type="date" id="purchased_date" name="purchased_date" placeholder="Purchased Date">
+                <input type="text" id="barcode" name="barcode" placeholder="Barcode">
             </form>
-        <button id="cancelAddNewProductButton" class="border-2 border-primary px-2 py-1">Cancel</button>
-        <button id="addNewProductButton" class="border-2 border-primary px-2 py-1">Add</button>
+        <button id="cancelAddNewEntryButton" class="border-2 border-primary px-2 py-1">Cancel</button>
+        <button id="addNewEntryButton" class="border-2 border-primary px-2 py-1">Add</button>
         <p id="message"></p>
         </div>
     </div>

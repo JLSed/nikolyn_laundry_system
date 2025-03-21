@@ -56,17 +56,44 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
     addNewProductButton.addEventListener("click", async () => {
         event.preventDefault();
-        const productName = document.getElementById("product_name").value;
-        const productCategory = document.getElementById("product_category").value;
-        const productPrice = document.getElementById("product_price").value;
-        const result = await window.electron.addNewProduct(productName, productCategory, productPrice);
+        const productName = document.getElementById("product_name");
+        const productCategory = document.getElementById("product_category");
+        const productPrice = document.getElementById("product_price");
+        const result = await window.electron.addNewProduct(productName.value, productCategory.value, productPrice.value);
         if (result.success) {
             document.getElementById("message").innerText = "Added successfully.";
+            productName.value = "";
+            productCategory.value = "";
+            productPrice.value = "";
+            setTimeout(() => {
+                document.getElementById("message").innerText = "";
+            }, 3000);
         } else {
             document.getElementById("message").innerText = "Failed added: " + result.error.message;
         }
     });
-    
+
+    const addNewEntryModal = document.getElementById("addNewEntryModal");
+    const openAddNewEntryModal = document.getElementById("openAddNewEntryModal");
+    const cancelAddNewEntryButton = document.getElementById("cancelAddNewEntryButton");
+    const addNewEntryButton = document.getElementById("addNewEntryButton");
+    openAddNewEntryModal.addEventListener("click", async () => {
+        addNewEntryModal.classList.remove("hidden");
+        const productItemList = document.getElementById("product_items_list");
+        const result = await window.electron.getProductItems();
+        result.forEach(item => {
+            productItemList.innerHTML += `<option>${item.item_name}</option>`;
+        });
+    });
+    cancelAddNewEntryButton.addEventListener("click", () => {
+        addNewEntryModal.classList.add("hidden");
+    });
+
+
+
+
+
+
 });
 
 

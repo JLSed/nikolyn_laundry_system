@@ -72,7 +72,7 @@ async function getAllProducts() {
  const { data, error } = await supabase
     .from("TBL_PRODUCT_ENTRY")
     .select(`
-      product_id,
+      entry_id,
       added_at,
       expiration_date,
       purchased_date,
@@ -114,7 +114,14 @@ async function addNewProduct(item_name, category, price) {
   return { success: true, data };
 }
 
-
+async function getProductItems() {
+    const { data, error } = await supabase.from('TBL_PRODUCT_ITEM').select("item_name");
+    if (error) {
+        console.error("Error fetching : " , error);
+        return [];
+    }
+    return data;
+}
 
 module.exports = { 
     login,
@@ -124,5 +131,5 @@ module.exports = {
     getAllProducts,
     getProductCategories,
     addNewProduct,
-
+    getProductItems,
 };

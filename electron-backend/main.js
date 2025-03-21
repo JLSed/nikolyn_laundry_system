@@ -6,7 +6,7 @@ const { signUp,
     getAllProducts,
     getProductCategories,
     addNewProduct,
-    
+    getProductItems,
 } = require('./supabase.js')
 const path = require('path');
 
@@ -43,6 +43,12 @@ ipcMain.handle("add:product_item", async (_, name, category, price) => {
 ipcMain.handle("request:product_categories", async () => {
     return result = await getProductCategories();
 })
+
+ipcMain.handle("request:product_items", async () => {
+    return await getProductItems();
+
+});
+
 
 let mainWindow;
 
