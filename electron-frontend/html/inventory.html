@@ -63,8 +63,9 @@
         <div class="bg-white p-6 rounded-sm text-center">
             <p class="text-xl font-bold">New Entry</p>
             <form class="flex flex-col">
-                <select id="product_items_list">
-                </select>
+                <input type="text" list="product_items_list" id="new_entry_name">
+                <datalist id="product_items_list">
+                </datalist>
                 <label for="expiration_date">Expiration Date</label>
                 <input type="date" id="expiration_date" name="expiration_date" placeholder="Expiration Date">
                 <label for="purchased_date">Purchased Date</label>
@@ -73,7 +74,7 @@
             </form>
         <button id="cancelAddNewEntryButton" class="border-2 border-primary px-2 py-1">Cancel</button>
         <button id="addNewEntryButton" class="border-2 border-primary px-2 py-1">Add</button>
-        <p id="message"></p>
+        <p id="new_entry_message"></p>
         </div>
     </div>
 

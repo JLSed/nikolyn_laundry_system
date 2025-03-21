@@ -101,7 +101,7 @@ async function getProductCategories() {
     return data;
 }
 
-async function addNewProduct(item_name, category, price) {
+async function addNewProductItem(item_name, category, price) {
   const { data, error } = await supabase.from('TBL_PRODUCT_ITEM').insert([
     {
       item_name,
@@ -115,12 +115,27 @@ async function addNewProduct(item_name, category, price) {
 }
 
 async function getProductItems() {
-    const { data, error } = await supabase.from('TBL_PRODUCT_ITEM').select("item_name");
+    const { data, error } = await supabase.from('TBL_PRODUCT_ITEM').select("item_name, item_id");
     if (error) {
         console.error("Error fetching : " , error);
-        return [];
+        return { success: false, error: error };
     }
-    return data;
+    return { success: true, data };
+}
+
+async function addNewProductEntry(item_id, expiration_date, purchased_date, barcode) {
+  const { data, error } = await supabase.from('TBL_PRODUCT_ENTRY').insert([
+    {
+      item_id,
+      expiration_date,
+      purchased_date,
+      barcode
+    }
+  ]);
+  if (error) {
+    return {success: false, error: error};
+  }
+  return {success: true};
 }
 
 module.exports = { 
@@ -130,6 +145,7 @@ module.exports = {
     getCurrentWorker,
     getAllProducts,
     getProductCategories,
-    addNewProduct,
+    addNewProductItem,
     getProductItems,
+    addNewProductEntry,
 };

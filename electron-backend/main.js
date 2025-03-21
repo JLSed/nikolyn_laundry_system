@@ -5,8 +5,9 @@ const { signUp,
     getCurrentWorker,
     getAllProducts,
     getProductCategories,
-    addNewProduct,
+    addNewProductItem,
     getProductItems,
+    addNewProductEntry,
 } = require('./supabase.js')
 const path = require('path');
 
@@ -36,7 +37,7 @@ ipcMain.handle("request:all_products", async () => {
 });
 
 ipcMain.handle("add:product_item", async (_, name, category, price) => {
-    return await addNewProduct(name, category, price);
+    return await addNewProductItem(name, category, price);
 });
 
 //listens to the add new product in inventory when clicked
@@ -46,8 +47,11 @@ ipcMain.handle("request:product_categories", async () => {
 
 ipcMain.handle("request:product_items", async () => {
     return await getProductItems();
-
 });
+
+ipcMain.handle("add:product_entry", async (_, item_id, expiration_date, purchased_date, barcode) => {
+    return result = await addNewProductEntry(item_id, expiration_date, purchased_date, barcode);
+})
 
 
 let mainWindow;
