@@ -84,11 +84,18 @@ document.addEventListener("DOMContentLoaded", async () => {
             const response = await window.electron.addNewProductEntry(matchedId, newEntryExpDate.value, newEntryPurchasedDate.value, newEntryBarcode.value)
             if (response.success) {
                 newEntryMessage.innerText = `Add Success`
+                newEntryName.value = "";
+                newEntryExpDate.value = "";
+                newEntryPurchasedDate.value = "";
+                newEntryBarcode.value = "";
                 const inventory = await window.electron.getAllProducts();
                 updateProductEntries(inventory);            }
         } else {
             newEntryMessage.innerText = `No matching item found.`
         }
+        setTimeout(() => {
+            newEntryMessage.innerText = "";
+        }, 3000);
 
     });
 

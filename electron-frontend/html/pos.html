@@ -78,21 +78,20 @@
                     </form>
                 </div>
             </div>
-            <div class="border-2 border-primary">
+            <div class="border-2 border-primary bg-secondary">
                 <p class="text-4xl font-bold text-accent">Products</p>
-                <div class="flex">
-                    <input class="flex-1 mr-4 p-1 text-primary bg-secondary" placeholder="Search Product...">
+                <div class="flex text-primary">
+                    <input id="search_product" class="flex-1 mr-4 p-1 border-2 border-primary text-primary bg-secondary" placeholder="Search Product...">
                     <p>Filter</p>
                 </div>
                 <table class="w-full">
-                    <thead class="bg-primary text-secondary">
+                    <thead class="text-primary text-left">
                         <tr>
                             <th class="p-2">Product Name</th>
                             <th class="p-2">Price</th>
-                            <th class="p-2">Price</th>
                         </tr>
                     </thead>   
-                    <tbody id="productBody" class="bg-secondary text-primary">
+                    <tbody id="productBody" class="bg-primary text-secondary">
                     <!-- products list -->
                     </tbody>                 
                 </table>

@@ -1,11 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
+    const productSearchInput = document.getElementById("search_product");
 
 
 
-
-serviceInputs.forEach(input => input.addEventListener("input", updateSummary));
-serviceCheckboxes.forEach(checkbox => checkbox.addEventListener("change", updateSummary));
-displayProductList()
+    serviceInputs.forEach(input => input.addEventListener("input", updateSummary));
+    serviceCheckboxes.forEach(checkbox => checkbox.addEventListener("change", updateSummary));
+    displayProductList()
 });
 
 
@@ -18,14 +18,23 @@ const productListBody = document.getElementById("productBody");
 
 async function displayProductList() {
     const products = await window.electron.getAllProducts();
+    const fetchedProducts = {};
     products.forEach(item => {
         const itemName = item.TBL_PRODUCT_ITEM?.item_name || "N/A";
+        if (!fetchedProducts[itemName]) fetchedProducts[itemName] = {data: item, count: 0}
+        if (fetchedProducts[itemName]) {
+            fetchedProducts[itemName].count += 1;
+        }
         const price = item.TBL_PRODUCT_ITEM?.price || "N/A";
         const row = document.createElement("tr");
         row.innerHTML = `
         <td class="p-2">${itemName}</td>
         <td class="p-2">₱ ${price}</td>`;
         productListBody.appendChild(row);
+        for (const product in fetchedProducts) {
+            console.log(product.count)
+
+        }
     });
 
 }
