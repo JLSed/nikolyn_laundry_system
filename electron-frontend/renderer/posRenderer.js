@@ -1,23 +1,15 @@
 document.addEventListener("DOMContentLoaded", () => {
     const productSearchInput = document.getElementById("search_product");
 
-
-
     serviceInputs.forEach(input => input.addEventListener("input", updateSummary));
     serviceCheckboxes.forEach(checkbox => checkbox.addEventListener("change", updateSummary));
     displayProductList()
 });
 
-
-
-const serviceInputs = document.querySelectorAll(".category-input");
-const serviceCheckboxes = document.querySelectorAll(".service-checkbox");
-const orderSummarySection = document.getElementById("orderSummary");
-const orderSummaryTotal = document.getElementById("orderTotal");
-const productListBody = document.getElementById("productBody");
-
 async function displayProductList() {
     const products = await window.electron.getAllProducts();
+    const productListBody = document.getElementById("productBody");
+
     const fetchedProducts = {};
     products.forEach(item => {
         const itemName = item.TBL_PRODUCT_ITEM?.item_name || "N/A";
@@ -25,19 +17,24 @@ async function displayProductList() {
         if (fetchedProducts[itemName]) {
             fetchedProducts[itemName].count += 1;
         }
-        const price = item.TBL_PRODUCT_ITEM?.price || "N/A";
-        const row = document.createElement("tr");
-        row.innerHTML = `
-        <td class="p-2">${itemName}</td>
-        <td class="p-2">₱ ${price}</td>`;
-        productListBody.appendChild(row);
-        for (const product in fetchedProducts) {
-            console.log(product.count)
-
-        }
     });
-
+    for (const product in fetchedProducts) {
+        const price = fetchedProducts[product].data.TBL_PRODUCT_ITEM?.price || "N/A";
+        const quantity = fetchedProducts[product].count;
+        const row = ` <tr class="selectable-row hover:bg-blue-600 cursor-pointer transition-colors group">
+                        <td class="p-2">${product}</td>
+                        <td class="p-2">( ${quantity} )</td>
+                        <td class="p-2 relative overflow-hidden">${price}
+                            <div class="absolute right-0 top-0 bottom-0 flex items-center p-3 font-bold bg-primary text-secondary transform translate-x-full transition-transform duration-300 group-hover:translate-x-0">
+                                <span>[ Add ]</span>
+                            </div>
+                        </td>
+                    <tr>`;
+        productListBody.innerHTML += row;    
+    }
 }
+
+
 
 function updateServicePrice(totalPrice, id) {
     const orderServicePrice = document.getElementById(id);
@@ -46,6 +43,10 @@ function updateServicePrice(totalPrice, id) {
     }
 }
 
+const serviceInputs = document.querySelectorAll(".category-input");
+const serviceCheckboxes = document.querySelectorAll(".service-checkbox");
+const orderSummarySection = document.getElementById("orderSummary");
+const orderSummaryTotal = document.getElementById("orderTotal");
 function updateSummary() {
     const serviceData = Array.from(serviceInputs).map(data => {
         const value = parseFloat(data.value);
@@ -61,7 +62,11 @@ function updateSummary() {
 
     const selectedServices = Array.from(serviceCheckboxes)
     .filter(cb => cb.checked)
-    .map(cb => cb.value)
+    .map(cb => {
+        const name = cb.value;
+        const price = cb.dataset.price;
+        return { name, price }
+    });
 
     let orderSummaryHTML = `<p class="font-bold text-3xl">Order Summary</p>`;
     const serviceTotalPrices = {};
@@ -78,21 +83,22 @@ function updateSummary() {
         }
     };
 
-    selectedServices.forEach(serviceName => {
-        const serviceId = `service-${serviceName.replace(/\s/g, '-')}`;
+    selectedServices.forEach(service => {
+        console.log(service.name)
+        const serviceId = `service-${service.name.replace(/\s/g, '-')}`;
         orderSummaryHTML += `<div class="order-section ml-2 text-lg"> `
         // order-header starting tag
         orderSummaryHTML += `
                 <div class="order-header cursor-pointer select-none font-bold text-xl" onClick="toggleSection('${serviceId}')">
                                     <span id="totalprice-${serviceId}" class="rounded bg-gray-300 px-2">0</span>
-                                    • ${serviceName} 
+                                    • ${service.name} 
                                     <span id="icon-${serviceId}">
                                         <i class="fa-solid fa-chevron-down"></i>
                                     </span>
                                 </div>`// order-header closing tag
         // total price for each service
         let totalPrice = 0;
-        if (serviceName === "Full Service") {
+        if (service.name === "Full Service") {
             orderSummaryHTML += `<div id="${serviceId}" class="order-content hidden select-none">
 
                                     <div class="ml-4 font-normal"><span class="rounded bg-gray-300 px-2">100</span> Fixed Price</div>
@@ -110,12 +116,12 @@ function updateSummary() {
 
             for (const category in orderContents) {
                 let total = 0;
-                const categoryId = `cat-${serviceName.replace(/\s/g, '-')}-${category.replace(/\s/g, '-')}`;
+                const categoryId = `cat-${service.name.replace(/\s/g, '-')}-${category.replace(/\s/g, '-')}`;
                 orderContents[category].forEach(entry => {
                     //kunin kung times na nareach yung max load, kaya ceil para kahit na less than sa max load counted as one
                     let maxLoad = Math.ceil(entry.value / entry.limit)
                     const remainder = entry.value % entry.limit;
-                    total += parseFloat(entry.price) * maxLoad;
+                    total += parseFloat(service.price) * maxLoad;
                     if (remainder > 0) {
                       maxLoad -= 1;
                     }
@@ -132,13 +138,13 @@ function updateSummary() {
                     orderSummaryHTML += `<div id="${categoryId}" class="order-category-content ml-8 hidden">`
                     for (let index = 0; index < maxLoad; index++) {
                         orderSummaryHTML += `<div>
-                                                <span class="rounded bg-gray-300 px-2">${entry.price}</span> - ${entry.limit} ${entry.unit}
+                                                <span class="rounded bg-gray-300 px-2">${service.price}</span> - ${entry.limit} ${entry.unit}
                                             </div>`
                     }
                     if (remainder > 0) {
                         const remRounded = Math.round(remainder * 10) / 10;
                         orderSummaryHTML += `<div>
-                                                <span class="rounded bg-gray-300 px-2">${entry.price}</span> - ${remRounded} ${entry.unit}
+                                                <span class="rounded bg-gray-300 px-2">${service.price}</span> - ${remRounded} ${entry.unit}
                                             </div>`
                     }
                     orderSummaryHTML += `</div>`

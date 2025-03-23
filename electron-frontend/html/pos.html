@@ -34,7 +34,7 @@
                     <div>
                         <p>Regular Clothes</p>
                         <div class="flex gap-2 items-center">
-                            <input type="number" data-price="55" data-category="Regular Clothes" data-limit="7" data-unit="kg" step="0.1" class="category-input p-2 text-primary font-bold bg-secondary">
+                            <input type="number" data-category="Regular Clothes" data-limit="7" data-unit="kg" step="0.1" class="category-input p-2 text-primary font-bold bg-secondary">
                             <p>kg</p>
                         </div>
                         <p>₱ 55 per 7kg</p>
@@ -42,7 +42,7 @@
                     <div>
                         <p>Towels, Blankets, Beddings</p>
                         <div class="flex gap-2 items-center">
-                            <input type="number" data-price="55" data-category="Towels, Blankets, Beddings" data-limit="4" data-unit="kg" step="0.1" class="category-input p-2 text-primary font-bold bg-secondary">
+                            <input type="number"  data-category="Towels, Blankets, Beddings" data-limit="4" data-unit="kg" step="0.1" class="category-input p-2 text-primary font-bold bg-secondary">
                             <p>kg</p>
                         </div>
                         <p>₱ 55 per 4kg</p>
@@ -50,7 +50,7 @@
                     <div>
                         <p>Comforter Queensize, Heavy Blankets</p>
                         <div class="flex gap-2 items-center">
-                            <input type="number" data-price="55" data-category="Comforter Queensize, Heavy Blankets" data-limit="1" data-unit="pc" step="1" class="category-input p-2 text-primary font-bold bg-secondary">
+                            <input type="number"  data-category="Comforter Queensize, Heavy Blankets" data-limit="1" data-unit="pc" step="1" class="category-input p-2 text-primary font-bold bg-secondary">
                             <p>pc</p>
                         </div>
                         <p>₱55 per 1pc</p>
@@ -60,19 +60,19 @@
                 <div class="flex">
                     <form class="flex gap-4">
                         <div class="px-2 flex border-2 border-secondary text-secondary p-1 gap-2">
-                            <input class="service-checkbox scale-150" value="Wash" type="checkbox" name="" id="">
+                            <input class="service-checkbox scale-150" value="Wash" data-price="55" type="checkbox" name="" id="">
                             <p class="text-2xl">Wash</p>
                         </div>
                         <div class="px-2 flex border-2 border-secondary text-secondary p-1 gap-2">
-                            <input class="service-checkbox scale-150" value="Dry" type="checkbox" name="" id="">
+                            <input class="service-checkbox scale-150" value="Dry" data-price="55" type="checkbox" name="" id="">
                             <p class="text-2xl">Dry</p>
                         </div>
                         <div class="px-2 flex border-2 border-secondary text-secondary p-1 gap-2">
-                            <input class="service-checkbox scale-150" value="Fold" type="checkbox" name="" id="">
+                            <input class="service-checkbox scale-150" value="Fold" data-price="20" type="checkbox" name="" id="">
                             <p class="text-2xl">Fold</p>
                         </div>
                         <div class="px-2 flex border-2 border-secondary text-secondary p-1 gap-2">
-                            <input class="service-checkbox scale-150" value="Full Service" type="checkbox" name="" id="">
+                            <input class="service-checkbox scale-150" value="Full Service" data-price="100" type="checkbox" name="" id="">
                             <p class="text-2xl">Full Service</p>
                         </div>
                     </form>
@@ -88,6 +88,7 @@
                     <thead class="text-primary text-left">
                         <tr>
                             <th class="p-2">Product Name</th>
+                            <th class="p-2">Quantity</th>
                             <th class="p-2">Price</th>
                         </tr>
                     </thead>   
