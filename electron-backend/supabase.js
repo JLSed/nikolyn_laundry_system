@@ -74,6 +74,7 @@ async function getAllProducts() {
     .select(`
       entry_id,
       added_at,
+      barcode,
       expiration_date,
       purchased_date,
       TBL_PRODUCT_ITEM (

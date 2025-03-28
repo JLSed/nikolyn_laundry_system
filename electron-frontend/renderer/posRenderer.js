@@ -3,9 +3,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
     serviceInputs.forEach(input => input.addEventListener("input", updateSummary));
     serviceCheckboxes.forEach(checkbox => checkbox.addEventListener("change", updateSummary));
+
+    window.orderProduct = function(product, productId) {
+        const product_detail = document.getElementById(`prolist-${productId}`);
+        if (product_detail) {
+            product_detail.classList.toggle("hidden");
+        }
+    }
+
+    window.showProductDetails = function() {
+        
+    }
+
     displayProductList()
 });
 
+// DISPLAY PRODUCTS //
 async function displayProductList() {
     const products = await window.electron.getAllProducts();
     const productListBody = document.getElementById("productBody");
@@ -13,26 +26,46 @@ async function displayProductList() {
     const fetchedProducts = {};
     products.forEach(item => {
         const itemName = item.TBL_PRODUCT_ITEM?.item_name || "N/A";
-        if (!fetchedProducts[itemName]) fetchedProducts[itemName] = {data: item, count: 0}
+        const itemBarcode = item.barcode;
+        if (!fetchedProducts[itemName]) fetchedProducts[itemName] = {data: item, count: 0, barcodes: []}
         if (fetchedProducts[itemName]) {
             fetchedProducts[itemName].count += 1;
+            fetchedProducts[itemName].barcodes.push(itemBarcode)
         }
     });
     for (const product in fetchedProducts) {
         const price = fetchedProducts[product].data.TBL_PRODUCT_ITEM?.price || "N/A";
         const quantity = fetchedProducts[product].count;
-        const row = ` <tr class="selectable-row hover:bg-blue-600 cursor-pointer transition-colors group">
-                        <td class="p-2">${product}</td>
-                        <td class="p-2">( ${quantity} )</td>
-                        <td class="p-2 relative overflow-hidden">${price}
-                            <div class="absolute right-0 top-0 bottom-0 flex items-center p-3 font-bold bg-primary text-secondary transform translate-x-full transition-transform duration-300 group-hover:translate-x-0">
+        const barcodes = fetchedProducts[product].barcodes;
+        const productId = product.replace(/\s/g, '-');
+        let row = `<tr  class="hover:bg-blue-600 transition-colors group">
+                        <td class="flex-1 p-2">${product}</td>
+                        <td class="flex-1 p-2">( ${quantity} )</td>
+                        <td class="flex-1 p-2 relative overflow-hidden">${price}
+                            <div onClick='orderProduct(${JSON.stringify(fetchedProducts[product])}, "${productId}")' class="cursor-pointer absolute right-0 top-0 bottom-0 flex items-center p-3 font-bold bg-primary text-secondary transform translate-x-full transition-transform duration-300 group-hover:translate-x-0">
                                 <span>[ Add ]</span>
                             </div>
                         </td>
-                    <tr>`;
+                    </tr>
+                    <tr id="prolist-${productId}" class="hidden">
+                        <td class="p-2">
+                            <input type="text" placeholder="Barcode" list="barlist-${productId}">
+                            <datalist id="barlist-${productId}">`
+                            barcodes.forEach(barcode => {
+                                row += `<option value='${barcode}'></option>`;
+                            });
+        row +=`             </datalist>
+                            <p>Found!</p>
+                        </td>
+                        <td class="">
+                            <button>Add Order</button>
+                        </td>
+                        <td class="p-2"><button >Cancel</button></td>
+                    </tr>`;
         productListBody.innerHTML += row;    
     }
 }
+// DISPLAY PRODUCTS //
 
 
 
@@ -42,7 +75,7 @@ function updateServicePrice(totalPrice, id) {
         orderServicePrice.innerHTML = totalPrice
     }
 }
-
+// ORDER SUMMARY //
 const serviceInputs = document.querySelectorAll(".category-input");
 const serviceCheckboxes = document.querySelectorAll(".service-checkbox");
 const orderSummarySection = document.getElementById("orderSummary");
@@ -147,18 +180,19 @@ function updateSummary() {
                                                 <span class="rounded bg-gray-300 px-2">${service.price}</span> - ${remRounded} ${entry.unit}
                                             </div>`
                     }
-                    orderSummaryHTML += `</div>`
+                    orderSummaryHTML += `</div>` // order-category-content closing tag
                     orderSummaryHTML += `</div>` // order-category-section closing tag
                 });
-
                 totalPrice += total;
-          }
+            }
         }
         serviceTotalPrices[`totalprice-${serviceId}`] = totalPrice;
         
         orderSummaryHTML += `</div> `; // order-content closing tag
         orderSummaryHTML += `</div> `; // order-section closing tag
     });
+
+    // for product prices
 
     orderSummarySection.innerHTML = orderSummaryHTML;
     // update full price per service
@@ -169,3 +203,4 @@ function updateSummary() {
     }
     orderSummaryTotal.innerHTML = `Total: ${overallPrice}`
 }
+// ORDER SUMMARY //
