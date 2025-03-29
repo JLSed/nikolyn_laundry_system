@@ -11,8 +11,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    window.showProductDetails = function() {
-        
+    window.showProductDetails = function(name) {
+        console.log(name);
     }
 
     displayProductList()
@@ -33,6 +33,8 @@ async function displayProductList() {
             fetchedProducts[itemName].barcodes.push(itemBarcode)
         }
     });
+
+    let addOrderButtons = {};
     for (const product in fetchedProducts) {
         const price = fetchedProducts[product].data.TBL_PRODUCT_ITEM?.price || "N/A";
         const quantity = fetchedProducts[product].count;
@@ -49,7 +51,8 @@ async function displayProductList() {
                     </tr>
                     <tr id="prolist-${productId}" class="hidden">
                         <td class="p-2">
-                            <input type="text" placeholder="Barcode" list="barlist-${productId}">
+                            <input type="text" placeholder="Barcode"  id="barcodeInput-${productId}" list="barlist-${productId}">
+                            
                             <datalist id="barlist-${productId}">`
                             barcodes.forEach(barcode => {
                                 row += `<option value='${barcode}'></option>`;
@@ -58,15 +61,21 @@ async function displayProductList() {
                             <p>Found!</p>
                         </td>
                         <td class="">
-                            <button>Add Order</button>
+                            <button id="addOrder-${productId}" class="add-order-button">Add Order</button>
                         </td>
                         <td class="p-2"><button >Cancel</button></td>
                     </tr>`;
-        productListBody.innerHTML += row;    
+        productListBody.insertAdjacentHTML("beforeend",row);
+        addOrderButtons[`addOrder-${productId}`] = document.getElementById(`addOrder-${productId}`);
     }
+    for (const button in addOrderButtons) {
+        addOrderButtons[button].addEventListener("click", () => {
+            console.log(`addOrder-${button}`);
+        });
+    }
+    
 }
 // DISPLAY PRODUCTS //
-
 
 
 function updateServicePrice(totalPrice, id) {

@@ -65,7 +65,7 @@ function createMainWindow() {
         },
     });
 
-    mainWindow.loadFile(path.join(__dirname, '../electron-frontend/html/inventory.html'))
+    mainWindow.loadFile(path.join(__dirname, '../electron-frontend/html/pos.html'))
 }
 
 
