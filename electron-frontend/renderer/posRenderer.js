@@ -34,7 +34,7 @@ async function displayProductList() {
         }
     });
 
-    let addOrderButtons = {};
+    let addOrderButtonNData = {};
     for (const product in fetchedProducts) {
         const price = fetchedProducts[product].data.TBL_PRODUCT_ITEM?.price || "N/A";
         const quantity = fetchedProducts[product].count;
@@ -51,8 +51,7 @@ async function displayProductList() {
                     </tr>
                     <tr id="prolist-${productId}" class="hidden">
                         <td class="p-2">
-                            <input type="text" placeholder="Barcode"  id="barcodeInput-${productId}" list="barlist-${productId}">
-                            
+                            <input type="text" placeholder="Barcode" id="barcodeInput-${productId}" list="barlist-${productId}">
                             <datalist id="barlist-${productId}">`
                             barcodes.forEach(barcode => {
                                 row += `<option value='${barcode}'></option>`;
@@ -66,11 +65,22 @@ async function displayProductList() {
                         <td class="p-2"><button >Cancel</button></td>
                     </tr>`;
         productListBody.insertAdjacentHTML("beforeend",row);
-        addOrderButtons[`addOrder-${productId}`] = document.getElementById(`addOrder-${productId}`);
+        addOrderButtonNData[`addOrder-${productId}`] = { 
+            button: document.getElementById(`addOrder-${productId}`), 
+            product: { name: product, price: price, barcode: `barcodeInput-${productId}`}
+        };
     }
-    for (const button in addOrderButtons) {
-        addOrderButtons[button].addEventListener("click", () => {
-            console.log(`addOrder-${button}`);
+    for (const button in addOrderButtonNData) {
+        addOrderButtonNData[button].button.addEventListener("click", () => {
+            let productOrders = JSON.parse(localStorage.getItem("productOrders")) || {};
+            productOrders[button] = {
+                barcode: document.getElementById(addOrderButtonNData[button].product.barcode).value,
+                name: addOrderButtonNData[button].product.name,
+                price: addOrderButtonNData[button].product.price,
+                id: button,
+            };
+            localStorage.setItem("productOrders", JSON.stringify(productOrders));
+            updateSummary();
         });
     }
     
@@ -131,7 +141,7 @@ function updateSummary() {
         orderSummaryHTML += `<div class="order-section ml-2 text-lg"> `
         // order-header starting tag
         orderSummaryHTML += `
-                <div class="order-header cursor-pointer select-none font-bold text-xl" onClick="toggleSection('${serviceId}')">
+                <div class="order-header cursor-pointer select-none font-bold text-lg" onClick="toggleSection('${serviceId}')">
                                     <span id="totalprice-${serviceId}" class="rounded bg-gray-300 px-2">0</span>
                                     • ${service.name} 
                                     <span id="icon-${serviceId}">
@@ -145,7 +155,7 @@ function updateSummary() {
 
                                     <div class="ml-4 font-normal"><span class="rounded bg-gray-300 px-2">100</span> Fixed Price</div>
                                 </div>`
-            totalPrice = 100;
+            totalPrice = parseFloat(service.price);
         } else {
             orderSummaryHTML += `<div id="${serviceId}" class="order-content select-none">`
             const orderContents = {};
@@ -170,7 +180,7 @@ function updateSummary() {
                     orderSummaryHTML += `<div class="order-category-section ml-4 font-normal">`
                     // order-category-header starting tag
                     orderSummaryHTML += `
-                                        <div class="order-category-header cursor-pointer select-none" onClick="toggleSection('${categoryId}')">
+                                        <div class="order-category-header cursor-pointer select-none text-base" onClick="toggleSection('${categoryId}')">
                                             <span class="rounded bg-gray-300 px-2">${total}</span> - ${entry.category}
                                             <span id="icon-${categoryId}">
                                                 <i class="fa-solid fa-chevron-down"></i>
@@ -198,11 +208,25 @@ function updateSummary() {
         serviceTotalPrices[`totalprice-${serviceId}`] = totalPrice;
         
         orderSummaryHTML += `</div> `; // order-content closing tag
-        orderSummaryHTML += `</div> `; // order-section closing tag
     });
-
-    // for product prices
-
+    
+    // for product orders summary
+    let productOrders = JSON.parse(localStorage.getItem("productOrders"));
+    console.log(productOrders)
+    if (productOrders) {
+        for (const product in productOrders) {
+            orderSummaryHTML += `
+                            <div class="order-header cursor-pointer select-none font-bold text-lg">
+                                    <span class="rounded bg-gray-300 px-2">${productOrders[product].price}</span>
+                                    • ${productOrders[product].name}
+                                    <span id="icon-">
+                                        <i class="fa-solid fa-chevron-down"></i>
+                                    </span>
+            </div>`
+            serviceTotalPrices[productOrders[product].id] = productOrders[product].price
+        }
+    }
+    orderSummaryHTML += `</div> `; // order-section closing tag
     orderSummarySection.innerHTML = orderSummaryHTML;
     // update full price per service
     let overallPrice = 0;
