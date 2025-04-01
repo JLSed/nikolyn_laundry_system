@@ -80,7 +80,8 @@ async function getAllProducts() {
       TBL_PRODUCT_ITEM (
         item_name,
         price,
-        category
+        category,
+        weight
       )
     `);
 
@@ -102,12 +103,13 @@ async function getProductCategories() {
     return data;
 }
 
-async function addNewProductItem(item_name, category, price) {
+async function addNewProductItem(item_name, weight, category, price) {
   const { data, error } = await supabase.from('TBL_PRODUCT_ITEM').insert([
     {
       item_name,
       category,
-      price
+      price,
+      weight
     }
   ]);
 
@@ -116,7 +118,7 @@ async function addNewProductItem(item_name, category, price) {
 }
 
 async function getProductItems() {
-    const { data, error } = await supabase.from('TBL_PRODUCT_ITEM').select("item_name, item_id");
+    const { data, error } = await supabase.from('TBL_PRODUCT_ITEM').select("item_name, weight, item_id");
     if (error) {
         console.error("Error fetching : " , error);
         return { success: false, error: error };

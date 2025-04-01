@@ -36,8 +36,8 @@ ipcMain.handle("request:all_products", async () => {
     return await getAllProducts();
 });
 
-ipcMain.handle("add:product_item", async (_, name, category, price) => {
-    return await addNewProductItem(name, category, price);
+ipcMain.handle("add:product_item", async (_, name, weight, category, price) => {
+    return await addNewProductItem(name, weight, category, price);
 });
 
 //listens to the add new product in inventory when clicked

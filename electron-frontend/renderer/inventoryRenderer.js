@@ -25,12 +25,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     addNewProductButton.addEventListener("click", async () => {
         event.preventDefault();
         const productName = document.getElementById("product_name");
+        const productWeight = document.getElementById("product_weight");
         const productCategory = document.getElementById("product_category");
         const productPrice = document.getElementById("product_price");
-        const result = await window.electron.addNewProductItem(productName.value, productCategory.value, productPrice.value);
+        const result = await window.electron.addNewProductItem(productName.value, productWeight.value, productCategory.value, productPrice.value);
         if (result.success) {
             document.getElementById("message").innerText = "Added successfully.";
             productName.value = "";
+            productWeight.value = "";
             productCategory.value = "";
             productPrice.value = "";
             setTimeout(() => {
@@ -55,8 +57,10 @@ document.addEventListener("DOMContentLoaded", async () => {
             storedResult = localStorage.getItem("product_items");
             products = JSON.parse(storedResult);
             console.log(products);
+            productItemList.innerHTML = "";
             products.forEach(item => {
-                productItemList.innerHTML += `<option data-id="${item.item_id}" value="${item.item_name}"></option>`;
+                const weight = item.weight || 'N/A'
+                productItemList.innerHTML += `<option data-id="${item.item_id}" value="${item.item_name} ${weight}"></option>`;
             });
         }
 
@@ -112,6 +116,7 @@ function updateProductEntries(inventory) {
     const itemName = product.TBL_PRODUCT_ITEM?.item_name || "N/A";
     const price = product.TBL_PRODUCT_ITEM?.price || "N/A";
     const category = product.TBL_PRODUCT_ITEM?.category || "N/A";
+    const weight = product.TBL_PRODUCT_ITEM?.weight || "N/A";
     const purchasedDate = product.purchased_date || "—";
     const expirationDate = product.expiration_date || "—";
     const addedAt = product.added_at || "—";
@@ -119,6 +124,7 @@ function updateProductEntries(inventory) {
                 <td class="p-2 ">
                     ${itemName}
                 </td>
+                <td class="p-2">${weight}</td>
                 <td class="p-2">₱ ${price}</td>
                 <td class="p-2">${purchasedDate}</td>
                 <td class="p-2">${expirationDate}</td>

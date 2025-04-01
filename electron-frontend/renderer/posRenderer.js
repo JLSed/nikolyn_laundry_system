@@ -6,8 +6,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     window.orderProduct = function(product, productId) {
         const product_detail = document.getElementById(`prolist-${productId}`);
+        const product_input = document.getElementById(`barcodeInput-${productId}`);
         if (product_detail) {
             product_detail.classList.toggle("hidden");
+            product_input.value = "";
         }
     }
 
@@ -37,11 +39,12 @@ async function displayProductList() {
     let addOrderButtonNData = {};
     for (const product in fetchedProducts) {
         const price = fetchedProducts[product].data.TBL_PRODUCT_ITEM?.price || "N/A";
+        const weight = fetchedProducts[product].data.TBL_PRODUCT_ITEM?.weight || "N/A";
         const quantity = fetchedProducts[product].count;
         const barcodes = fetchedProducts[product].barcodes;
         const productId = product.replace(/\s/g, '-');
         let row = `<tr  class="hover:bg-blue-600 transition-colors group">
-                        <td class="flex-1 p-2">${product}</td>
+                        <td class="flex-1 p-2">${product} ${weight}</td>
                         <td class="flex-1 p-2">( ${quantity} )</td>
                         <td class="flex-1 p-2 relative overflow-hidden">${price}
                             <div onClick='orderProduct(${JSON.stringify(fetchedProducts[product])}, "${productId}")' class="cursor-pointer absolute right-0 top-0 bottom-0 flex items-center p-3 font-bold bg-primary text-secondary transform translate-x-full transition-transform duration-300 group-hover:translate-x-0">
@@ -62,12 +65,12 @@ async function displayProductList() {
                         <td class="">
                             <button id="addOrder-${productId}" class="add-order-button">Add Order</button>
                         </td>
-                        <td class="p-2"><button >Cancel</button></td>
+                        <td class="p-2"><button onClick='orderProduct(${JSON.stringify(fetchedProducts[product])}, "${productId}")'>Cancel</button></td>
                     </tr>`;
         productListBody.insertAdjacentHTML("beforeend",row);
         addOrderButtonNData[`addOrder-${productId}`] = { 
             button: document.getElementById(`addOrder-${productId}`), 
-            product: { name: product, price: price, barcode: `barcodeInput-${productId}`}
+            product: { name: product, price: price, barcode: `barcodeInput-${productId}`, id: `productOrder-${productId}`}
         };
     }
     for (const button in addOrderButtonNData) {
@@ -77,7 +80,7 @@ async function displayProductList() {
                 barcode: document.getElementById(addOrderButtonNData[button].product.barcode).value,
                 name: addOrderButtonNData[button].product.name,
                 price: addOrderButtonNData[button].product.price,
-                id: button,
+                id: addOrderButtonNData[button].product.id,
             };
             localStorage.setItem("productOrders", JSON.stringify(productOrders));
             updateSummary();
@@ -217,7 +220,7 @@ function updateSummary() {
         for (const product in productOrders) {
             orderSummaryHTML += `
                             <div class="order-header cursor-pointer select-none font-bold text-lg">
-                                    <span class="rounded bg-gray-300 px-2">${productOrders[product].price}</span>
+                                    <span id="${productOrders[product].id}" class="rounded bg-gray-300 px-2">0</span>
                                     • ${productOrders[product].name}
                                     <span id="icon-">
                                         <i class="fa-solid fa-chevron-down"></i>
