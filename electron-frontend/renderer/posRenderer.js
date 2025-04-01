@@ -53,18 +53,19 @@ async function displayProductList() {
                         </td>
                     </tr>
                     <tr id="prolist-${productId}" class="hidden">
-                        <td class="p-2">
-                            <input type="text" placeholder="Barcode" id="barcodeInput-${productId}" list="barlist-${productId}">
-                            <datalist id="barlist-${productId}">`
-                            barcodes.forEach(barcode => {
-                                row += `<option value='${barcode}'></option>`;
-                            });
-        row +=`             </datalist>
-                            <p>Found!</p>
+                        <td class="p-2 flex justify-evenly">
+                            <form>
+                                <input type="text" placeholder="Barcode" id="barcodeInput-${productId}" list="barlist-${productId}">
+                                <datalist id="barlist-${productId}">`
+                                barcodes.forEach(barcode => {
+                                    row += `<option value='${barcode}'></option>`;
+                                });
+        row +=`                 </datalist>
+                                <button id="addOrder-${productId}" class="add-order-button">Add Order</button>
+                            </form>
                         </td>
-                        <td class="">
-                            <button id="addOrder-${productId}" class="add-order-button">Add Order</button>
-                        </td>
+                        <td class=""><p>Found!</p></td>
+
                         <td class="p-2"><button onClick='orderProduct(${JSON.stringify(fetchedProducts[product])}, "${productId}")'>Cancel</button></td>
                     </tr>`;
         productListBody.insertAdjacentHTML("beforeend",row);
@@ -75,15 +76,20 @@ async function displayProductList() {
     }
     for (const button in addOrderButtonNData) {
         addOrderButtonNData[button].button.addEventListener("click", () => {
+            event.preventDefault();
             let productOrders = JSON.parse(localStorage.getItem("productOrders")) || {};
-            productOrders[button] = {
-                barcode: document.getElementById(addOrderButtonNData[button].product.barcode).value,
+            const barcodeValue = document.getElementById(addOrderButtonNData[button].product.barcode);
+            console.log(productOrders)
+            productOrders[`${button}-barcode${barcodeValue.value}`] = {
+                barcode: barcodeValue.value,
                 name: addOrderButtonNData[button].product.name,
                 price: addOrderButtonNData[button].product.price,
-                id: addOrderButtonNData[button].product.id,
+                shared_id: addOrderButtonNData[button].product.id,
             };
             localStorage.setItem("productOrders", JSON.stringify(productOrders));
             updateSummary();
+            barcodeValue.value = "";
+            //localStorage.removeItem("productOrders");
         });
     }
     
@@ -139,7 +145,6 @@ function updateSummary() {
     };
 
     selectedServices.forEach(service => {
-        console.log(service.name)
         const serviceId = `service-${service.name.replace(/\s/g, '-')}`;
         orderSummaryHTML += `<div class="order-section ml-2 text-lg"> `
         // order-header starting tag
@@ -215,18 +220,19 @@ function updateSummary() {
     
     // for product orders summary
     let productOrders = JSON.parse(localStorage.getItem("productOrders"));
-    console.log(productOrders)
+    // console.log(productOrders)
     if (productOrders) {
         for (const product in productOrders) {
+            console.log(product)
             orderSummaryHTML += `
-                            <div class="order-header cursor-pointer select-none font-bold text-lg">
-                                    <span id="${productOrders[product].id}" class="rounded bg-gray-300 px-2">0</span>
+                            <div class="order-product-header cursor-pointer select-none font-bold text-lg">
+                                    <span id="${product}" class="rounded bg-gray-300 px-2">0</span>
                                     • ${productOrders[product].name}
                                     <span id="icon-">
                                         <i class="fa-solid fa-chevron-down"></i>
                                     </span>
-            </div>`
-            serviceTotalPrices[productOrders[product].id] = productOrders[product].price
+                            </div>`
+            serviceTotalPrices[product] = productOrders[product].price
         }
     }
     orderSummaryHTML += `</div> `; // order-section closing tag
