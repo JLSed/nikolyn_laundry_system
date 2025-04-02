@@ -53,15 +53,15 @@ async function displayProductList() {
                         </td>
                     </tr>
                     <tr id="prolist-${productId}" class="hidden">
-                        <td class="p-2 flex justify-evenly">
-                            <form>
-                                <input type="text" placeholder="Barcode" id="barcodeInput-${productId}" list="barlist-${productId}">
+                        <td class="p-2 flex">
+                            <form id="addOrder-${productId}">
+                                <input type="text" placeholder="Barcode" id="barcodeInput-${productId}" list="barlist-${productId}" required>
                                 <datalist id="barlist-${productId}">`
                                 barcodes.forEach(barcode => {
                                     row += `<option value='${barcode}'></option>`;
                                 });
         row +=`                 </datalist>
-                                <button id="addOrder-${productId}" class="add-order-button">Add Order</button>
+                                <button class="add-order-button" type="submit">Add Order</button>
                             </form>
                         </td>
                         <td class=""><p>Found!</p></td>
@@ -75,7 +75,7 @@ async function displayProductList() {
         };
     }
     for (const button in addOrderButtonNData) {
-        addOrderButtonNData[button].button.addEventListener("click", () => {
+        addOrderButtonNData[button].button.addEventListener("submit", () => {
             event.preventDefault();
             let productOrders = JSON.parse(localStorage.getItem("productOrders")) || {};
             const barcodeValue = document.getElementById(addOrderButtonNData[button].product.barcode);
@@ -223,7 +223,7 @@ function updateSummary() {
     // console.log(productOrders)
     if (productOrders) {
         for (const product in productOrders) {
-            console.log(product)
+            console.log(productOrders[product])
             orderSummaryHTML += `
                             <div class="order-product-header cursor-pointer select-none font-bold text-lg">
                                     <span id="${product}" class="rounded bg-gray-300 px-2">0</span>

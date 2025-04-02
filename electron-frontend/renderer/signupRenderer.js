@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 const signupBtn = document.getElementById("signup");
-    signupBtn.addEventListener("click", async () => {
+    signupBtn.addEventListener("submit", async () => {
         event.preventDefault();
         const email = document.getElementById("email").value;
         const password = document.getElementById("password").value;
