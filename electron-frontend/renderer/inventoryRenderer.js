@@ -28,13 +28,15 @@ document.addEventListener("DOMContentLoaded", async () => {
         const productWeight = document.getElementById("product_weight");
         const productCategory = document.getElementById("product_category");
         const productPrice = document.getElementById("product_price");
-        const result = await window.electron.addNewProductItem(productName.value, productWeight.value, productCategory.value, productPrice.value);
+        const productBarcode = document.getElementById("product_barcode");
+        const result = await window.electron.addNewProductItem(productName.value, productBarcode.value, productWeight.value, productCategory.value, productPrice.value);
         if (result.success) {
             document.getElementById("message").innerText = "Added successfully.";
             productName.value = "";
             productWeight.value = "";
             productCategory.value = "";
             productPrice.value = "";
+            productBarcode.value = "";
             setTimeout(() => {
                 document.getElementById("message").innerText = "";
             }, 3000);
@@ -72,26 +74,26 @@ document.addEventListener("DOMContentLoaded", async () => {
         const newEntryName = document.getElementById("new_entry_name");
         const newEntryExpDate = document.getElementById("expiration_date");
         const newEntryPurchasedDate = document.getElementById("purchased_date");
-        const newEntryBarcode = document.getElementById("barcode");
         const newEntryMessage = document.getElementById("new_entry_message");
         storedResult = localStorage.getItem("product_items");
         products = JSON.parse(storedResult);
         let found = false;
         let matchedId = null;
         products.forEach(item => {
-            if (item.item_name.toLowerCase() === newEntryName.value.toLowerCase()) {
+            const item_name = item.item_name.toLowerCase() + " " + item.weight;
+            if (item_name === newEntryName.value.toLowerCase()) {
                 found = true;
                 matchedId = item.item_id;
             }            
         });
         if(found) {
-            const response = await window.electron.addNewProductEntry(matchedId, newEntryExpDate.value, newEntryPurchasedDate.value, newEntryBarcode.value)
+            const response = await window.electron.addNewProductEntry(matchedId, newEntryExpDate.value, newEntryPurchasedDate.value)
             if (response.success) {
                 newEntryMessage.innerText = `Add Success`
                 newEntryName.value = "";
                 newEntryExpDate.value = "";
                 newEntryPurchasedDate.value = "";
-                newEntryBarcode.value = "";
+                //updates the inventory when add is successful
                 const inventory = await window.electron.getAllProducts();
                 updateProductEntries(inventory);            }
         } else {

@@ -74,12 +74,12 @@ async function getAllProducts() {
     .select(`
       entry_id,
       added_at,
-      barcode,
       expiration_date,
       purchased_date,
       TBL_PRODUCT_ITEM (
         item_name,
         price,
+        barcode,
         category,
         weight
       )
@@ -103,10 +103,11 @@ async function getProductCategories() {
     return data;
 }
 
-async function addNewProductItem(item_name, weight, category, price) {
+async function addNewProductItem(item_name,barcode, weight, category, price) {
   const { data, error } = await supabase.from('TBL_PRODUCT_ITEM').insert([
     {
       item_name,
+      barcode,
       category,
       price,
       weight
@@ -126,13 +127,12 @@ async function getProductItems() {
     return { success: true, data };
 }
 
-async function addNewProductEntry(item_id, expiration_date, purchased_date, barcode) {
+async function addNewProductEntry(item_id, expiration_date, purchased_date) {
   const { data, error } = await supabase.from('TBL_PRODUCT_ENTRY').insert([
     {
       item_id,
       expiration_date,
       purchased_date,
-      barcode
     }
   ]);
   if (error) {

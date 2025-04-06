@@ -7,7 +7,7 @@ contextBridge.exposeInMainWorld('electron', {
     getCurrentWorker: () => ipcRenderer.invoke("request:current_worker"),
     getAllProducts: () => ipcRenderer.invoke("request:all_products"),
     getProductCategories: () => ipcRenderer.invoke("request:product_categories"),
-    addNewProductItem: (name, weight, category, price) => ipcRenderer.invoke("add:product_item", name, weight, category, price),
+    addNewProductItem: (name, barcode, weight, category, price) => ipcRenderer.invoke("add:product_item", name, barcode, weight, category, price),
     getProductItems: () => ipcRenderer.invoke("request:product_items"),
-    addNewProductEntry: (item_id, expiration_date, purchased_date, barcode) => ipcRenderer.invoke("add:product_entry", item_id, expiration_date, purchased_date, barcode),
+    addNewProductEntry: (item_id, expiration_date, purchased_date) => ipcRenderer.invoke("add:product_entry", item_id, expiration_date, purchased_date),
 });

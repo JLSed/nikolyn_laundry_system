@@ -36,8 +36,8 @@ ipcMain.handle("request:all_products", async () => {
     return await getAllProducts();
 });
 
-ipcMain.handle("add:product_item", async (_, name, weight, category, price) => {
-    return await addNewProductItem(name, weight, category, price);
+ipcMain.handle("add:product_item", async (_, name, barcode, weight, category, price) => {
+    return await addNewProductItem(name, barcode, weight, category, price);
 });
 
 //listens to the add new product in inventory when clicked
@@ -49,8 +49,8 @@ ipcMain.handle("request:product_items", async () => {
     return await getProductItems();
 });
 
-ipcMain.handle("add:product_entry", async (_, item_id, expiration_date, purchased_date, barcode) => {
-    return result = await addNewProductEntry(item_id, expiration_date, purchased_date, barcode);
+ipcMain.handle("add:product_entry", async (_, item_id, expiration_date, purchased_date) => {
+    return result = await addNewProductEntry(item_id, expiration_date, purchased_date);
 })
 
 

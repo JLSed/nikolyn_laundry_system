@@ -48,6 +48,7 @@
             <p class="text-xl font-bold">New Product</p>
             <form class="flex flex-col">
                 <input type="text" id="product_name" name="product_name" placeholder="Product Name">
+                <input type="text" id="product_barcode" name="product_barcode" placeholder="Barcode">
                 <input type="text" id="product_weight" name="product_weight" placeholder="Weight">
                 <input type="text" id="product_category" list="product_categories" name="product_category" placeholder="Category">
                 <datalist id="product_categories">
@@ -72,7 +73,6 @@
                 <input type="date" id="expiration_date" name="expiration_date" placeholder="Expiration Date">
                 <label for="purchased_date">Purchased Date</label>
                 <input type="date" id="purchased_date" name="purchased_date" placeholder="Purchased Date">
-                <input type="text" id="barcode" name="barcode" placeholder="Barcode">
             </form>
         <button id="cancelAddNewEntryButton" class="border-2 border-primary px-2 py-1">Cancel</button>
         <button id="addNewEntryButton" class="border-2 border-primary px-2 py-1">Add</button>
