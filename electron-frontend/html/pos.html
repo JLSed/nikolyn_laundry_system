@@ -7,15 +7,7 @@
   <link href="../output.css" rel="stylesheet">
 </head>
 <body class="flex flex-col gap-2 bg-secondary text-primary font-outfit">
-
-    <nav class="flex border-b-2 border-primary p-2 items-center justify-between">
-        <p id="workerNameDisplay" class="select-none font-monstserrat font-semibold bg-gray-300 px-2 shadow-lg rounded">Nikolyn's Laundry Shop</p>
-        <div class="">
-            <a href="./pos.html" class="border-2 border-primary px-2 py-1 hover:bg-primary hover:text-secondary transition-colors" type="button">Point of Sale</a>
-            <a href="./inventory.html" class="border-2 border-primary px-2 py-1  hover:bg-primary hover:text-secondary transition-colors" type="button">Inventory</a>
-            <a id="clockOutBtn" class="border-2 border-primary px-2 py-1 cursor-pointer hover:bg-primary hover:text-secondary transition-colors" type="button">Clock out</a>
-        </div>
-    </nav>
+    <nav-bar></nav-bar>
     <div class="flex justify-between items-center">
         <p class="font-michroma font-black text-3xl">POINT OF SALES</p>
         <div class="flex gap-2 pr-2">
@@ -128,5 +120,6 @@
     </div>
     <script defer src="../renderer/posRenderer.js"></script>
     <script defer src="../renderer/mainRenderer.js"></script>
+    <script defer src="../component/navbar.js"></script>
 </body>
 </html>
