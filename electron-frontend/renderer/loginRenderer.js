@@ -12,4 +12,13 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("message").innerText = "Login failed: " + response.message;
         }
     });
+
+    const passwordInput = document.getElementById("password");
+    const togglePassword = document.getElementById("togglePassword");
+
+    togglePassword.addEventListener("click", () => {
+    const isPassword = passwordInput.type === "password";
+    passwordInput.type = isPassword ? "text" : "password";
+    togglePassword.innerText = isPassword ? "visibility_off" : "visibility";
+    });    
 });

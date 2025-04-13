@@ -5,21 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nikolyn's Laundry Shop</title>
   <link href="../output.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
 </head>
-<body class="bg-secondary flex flex-col justify-center items-center h-svh">
-    <div class="border-2 border-primary p-8 flex flex-col gap-4">
-        <h2 class="text-3xl font-outfit font-semibold text-primary">Login</h2>
-        <form class="flex flex-col gap-2">
-            <input class="border-2 border-primary bg-secondary p-1 font-outfit" type="email" id="email" placeholder="Enter email" required>
-            <input class="border-2 border-primary bg-secondary p-1 font-outfit" type="password" id="password" placeholder="Enter password" required>
-            <button class="border-2 text-primary border-primary font-outfit font-semibold p-2" id="loginBtn">Login</button>
-            <a class="border-2 text-primary border-primary font-outfit font-semibold p-2 self-center" id="signupBtn" href="./signup.html">Sign Up</a>
+<body class="bg-secondary  flex justify-between items-center h-svh">
+    <div class=" relative flex-1 h-full text-primary font-poppins font-bold">
+        <p class="text-4xl font-outfit">  Nikolyn's Laudry Shop</p>
+        <p class="text-6xl">Management System</p>
+        <span class="material-symbols-outlined absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 " style="font-size: 300px;">local_laundry_service</span>
+    </div>
+    <div class="bg-primary text-secondary p-8 flex flex-col h-full gap-4 m-4 shadow-md">
+        <h2 class="text-3xl font-outfit font-semibold ">Account Login</h2>
+        <form class="flex flex-col ">
+            <label for="email" class="text-sm font-outfit">Email</label>
+            <input class=" text-primary rounded-lg bg-secondary p-1 px-2 font-outfit" type="email" id="email" placeholder="Enter email" required>
+            <label for="password" class="text-sm font-outfit">Password</label>
+            <div class="password-wrapper relative">
+                <input class=" text-primary rounded-lg bg-secondary p-1 px-2 font-outfit" type="password" id="password" placeholder="Enter password" required>
+                <span  id="togglePassword" class="material-symbols-outlined absolute right-2 top-1/2 translate-y-[-50%] text-primary cursor-pointer select-none">visibility</span>
+            </div>
+            <button class="bg-accent  font-outfit font-semibold p-2 mt-4 rounded-xl" id="loginBtn">Login</button>
+            <a class="border-2 border-primary font-outfit font-semibold p-2 self-center" id="signupBtn" href="./signup.html">Sign Up</a>
 
         </form>
+        <p id="message"></p>
     </div>
 
 
-    <p id="message"></p>
     <script defer src="../renderer/loginRenderer.js"></script>
 
 </body>
