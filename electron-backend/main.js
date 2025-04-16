@@ -8,6 +8,11 @@ const { signUp,
     addNewProductItem,
     getProductItems,
     addNewProductEntry,
+    getAllWorkers,
+    getAllWorkerRoles,
+    getAllRoles,
+    assignEmployeeRole,
+    unassignEmployeeRole,
 } = require('./supabase.js')
 const path = require('path');
 
@@ -43,7 +48,7 @@ ipcMain.handle("add:product_item", async (_, name, barcode, weight, category, pr
 //listens to the add new product in inventory when clicked
 ipcMain.handle("request:product_categories", async () => {
     return result = await getProductCategories();
-})
+});
 
 ipcMain.handle("request:product_items", async () => {
     return await getProductItems();
@@ -51,7 +56,27 @@ ipcMain.handle("request:product_items", async () => {
 
 ipcMain.handle("add:product_entry", async (_, item_id, expiration_date, purchased_date) => {
     return result = await addNewProductEntry(item_id, expiration_date, purchased_date);
-})
+});
+
+ipcMain.handle("request:all_workers", async () => {
+    return result = await getAllWorkers();
+});
+
+ipcMain.handle("request:all_worker_roles", async (_, item_id, worker_id) => {
+    return result = await getAllWorkerRoles(item_id, worker_id);
+});
+
+ipcMain.handle("request:all_roles", async () => {
+    return result = await getAllRoles();
+});
+
+ipcMain.handle("add:employee_role", async (_, role_id, worker_id) => {
+    return result = await assignEmployeeRole(role_id, worker_id);
+});
+
+ipcMain.handle("remove:employee_role", async (_, role_id, worker_id) => {
+    return result = await unassignEmployeeRole(role_id, worker_id);
+});
 
 
 let mainWindow;
@@ -67,9 +92,6 @@ function createMainWindow() {
 
     mainWindow.loadFile(path.join(__dirname, '../electron-frontend/html/pos.html'))
 }
-
-
-
 
 
 

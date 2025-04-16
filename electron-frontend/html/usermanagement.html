@@ -5,11 +5,70 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title></title>
         <link href="../output.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+
     </head>
 <body class="flex flex-col gap-2 bg-secondary text-primary font-outfit">
-        <nav-bar></nav-bar>
-        <p>Hello</p> 
+    <nav-bar></nav-bar>
+    <div class="flex justify-between items-center">
+        <p class="font-michroma font-black text-3xl">USER MANAGEMENT</p>
+        <div class="flex gap-2 pr-2">
+            <div class="relative flex items-center">
+                <input class=" pl-7 border-2 border-primary rounded-lg py-1 bg-secondary" type="text" placeholder="Search Employee">
+                <span class="material-symbols-outlined absolute left-1 top-1/2 translate-y-[-50%] text-primary select-none">search</span>            
+            </div>
+            <div class="flex items-center"> <span class="material-symbols-outlined">filter_list</span> Filters</div>
+            <div id="addEmployeeBtn" class="flex items-center cursor-pointer bg-primary shadow-lg text-secondary px-2 py-1 rounded-lg">
+                <span class="material-symbols-outlined">add</span>Add Employee
+            </div>
+        </div>
+    </div>
+    <main class="flex gap-1">
+        <div class="flex-1">
+            Additional Information
+            
+        </div>
+        <div class="border-2 border-slate-400 rounded-lg mr-2 p-4">
+            <table class="flex-1">
+                <thead class="text-slate-400 text-center text-sm">
+                    <tr>
+                        <th class="p-2">Employee Name</th>
+                        <th class="p-2">Roles</th>
+                        <th class="p-2">Last Clock-In</th>
+                        <th class="p-2">Date Added</th>
+                    </tr>
+                </thead>   
+                <tbody id="employeeBody" class="px-2">
+                    
+                </tbody>                 
+            </table>
+        </div>
+    </main>
+
+    <div class="hidden absolute top-0 bottom-0 right-0 left-0 z-10 bg-gray-400/60 flex justify-center items-center">
+        <div class="relative bg-secondary rounded-xl shadow-xl p-12 overflow-clip">
+            <div class="absolute top-0 right-0 left-0 backdrop-blur-xl bg-black">
+                hello
+            </div>
+            <form action="" class="flex flex-col">
+                <div>
+                    <p>Basic Information</p>
+                    <p >Full Name</p>
+                    <input type="text" placeholder="First Name" required>
+                    <input type="text" placeholder="Middle Name" required>
+                    <input type="text" placeholder="Last Name" required>
+                </div>
+                <div>
+                    <p >Contact Information</p>
+                    <input type="text" placeholder="Email" required>
+                    <input type="text" placeholder="Contact Number" required>
+                </div>
+
+            </form>
+        </div>
+    </div>
     <script defer src="../renderer/mainRenderer.js"></script>
+    <script defer src="../renderer/userManageRenderer.js"></script>
     <script defer src="../component/navbar.js"></script>
     </body>
 </html>

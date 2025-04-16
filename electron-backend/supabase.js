@@ -18,7 +18,7 @@ async function signUp(email, password, first_name, middle_name, last_name) {
         console.log("→ Auth error:", error.message);
         return { success: false, message: error.message };
     }
-    const workerResult = await createNewWorkerEntry(data.user.id, first_name, middle_name, last_name);
+    const workerResult = await createNewWorkerEntry(data.user.id, first_name, middle_name, last_name, email);
     
     if (workerResult.error) {
         return { success: false, message: "User created, but worker insert failed: " + workerResult.error };
@@ -38,13 +38,14 @@ async function signOut() {
   }
 }
 
-async function createNewWorkerEntry(user_id, first_name, middle_name, last_name) {
+async function createNewWorkerEntry(auth_id, first_name, middle_name, last_name, email) {
   const { data, error } = await supabase.from('TBL_WORKER').insert([
     {
-      user_id,
+      auth_id,
       first_name,
       middle_name,
-      last_name
+      last_name,
+      email
     }
   ]);
 
@@ -141,6 +142,53 @@ async function addNewProductEntry(item_id, expiration_date, purchased_date) {
   return {success: true};
 }
 
+async function getAllWorkers() {
+  const { data, error } = await supabase
+    .from('TBL_WORKER')
+    .select('*');
+  
+  if (error) throw error;
+  return data;
+}
+
+async function getAllWorkerRoles(worker_id) {
+  const { data, error } = await supabase
+    .from('TBL_WORKER_ROLE')
+    .select('TBL_ROLE (id, role_name)').eq("worker_id", worker_id);
+  
+  if (error) throw error;
+  return data;
+}
+
+async function getAllRoles() {
+  const { data, error } = await supabase
+    .from('TBL_ROLE')
+    .select('*');
+  
+  if (error) throw error;
+  return data;
+}
+
+async function assignEmployeeRole(role_id, worker_id) {
+  const { data, error } = await supabase
+    .from('TBL_WORKER_ROLE')
+    .insert([{ role_id, worker_id }]);
+  
+  if (error) throw error;
+  return {success: true};
+}
+
+async function unassignEmployeeRole(role_id, worker_id) {
+  const { data, error } = await supabase
+    .from('TBL_WORKER_ROLE')
+    .delete()
+    .match({ role_id, worker_id });
+  
+  if (error) throw error;
+  return {success: true};
+}
+
+
 module.exports = { 
     login,
     signUp,
@@ -151,4 +199,9 @@ module.exports = {
     addNewProductItem,
     getProductItems,
     addNewProductEntry,
+    getAllWorkers,
+    getAllWorkerRoles,
+    getAllRoles,
+    assignEmployeeRole,
+    unassignEmployeeRole,
 };
