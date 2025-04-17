@@ -60,13 +60,22 @@ async function getCurrentWorker() {
 
   const { data, error } = await supabase
     .from("TBL_WORKER")
-    .select("first_name, middle_name, last_name")
-    .eq("user_id", userId)
+    .select("employee_id, first_name, middle_name, last_name")
+    .eq("auth_id", userId)
     .single();
 
-  if (error || !data) return { success: false };
+  if (error || !data) return { success: false, error: error };
+  if (data) {
+    // get current login worker all roles
+    const role_data = await getAllWorkerRoles(data.employee_id);
+    console.log(role_data)
+    if (role_data) {
+      return { success: true, worker: data, worker_roles: role_data };
+    } else {
+      return { success: false, error: error }
+    }
+  }
 
-  return { success: true, worker: data };
 }
 
 async function getAllProducts() {
@@ -151,10 +160,10 @@ async function getAllWorkers() {
   return data;
 }
 
-async function getAllWorkerRoles(worker_id) {
+async function getAllWorkerRoles(employee_id) {
   const { data, error } = await supabase
     .from('TBL_WORKER_ROLE')
-    .select('TBL_ROLE (id, role_name)').eq("worker_id", worker_id);
+    .select('TBL_ROLE (id, role_name)').eq("employee_id", employee_id);
   
   if (error) throw error;
   return data;
@@ -169,20 +178,20 @@ async function getAllRoles() {
   return data;
 }
 
-async function assignEmployeeRole(role_id, worker_id) {
+async function assignEmployeeRole(role_id, employee_id) {
   const { data, error } = await supabase
     .from('TBL_WORKER_ROLE')
-    .insert([{ role_id, worker_id }]);
+    .insert([{ role_id, employee_id }]);
   
   if (error) throw error;
   return {success: true};
 }
 
-async function unassignEmployeeRole(role_id, worker_id) {
+async function unassignEmployeeRole(role_id, employee_id) {
   const { data, error } = await supabase
     .from('TBL_WORKER_ROLE')
     .delete()
-    .match({ role_id, worker_id });
+    .match({ role_id, employee_id });
   
   if (error) throw error;
   return {success: true};
